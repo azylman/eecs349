@@ -82,12 +82,7 @@ void Items::Add(List<Item^>^ items) {
 }
 
 String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassifications) {
-	List<String^>^ attributesToCheck = gcnew List<String^>(attributes);
-
-	// Set difference for lists, basically. Check all the attributes we haven't already used.
-	for each(String^ attribute in usedClassifications->Keys) {
-		attributesToCheck->Remove(attribute);
-	}
+	List<String^>^ attributesToCheck = setSubtract(attributes, gcnew List<String^>(usedClassifications->Keys));
 
 	double maxGain = 0;
 	String^ bestAttribute;
@@ -122,6 +117,21 @@ HashSet<int>^ Items::getNRandomNumbersFromAToB(int n, int a, int b) {
 	Random^ rnd = gcnew Random();
 	while(result->Count < n) {
 		result->Add(rnd->Next(a, b));
+	}
+	return result;
+}
+
+Items^ Items::getTestingSet(Items^ trainingSet) {
+	Items^ testingSet = gcnew Items(attributes);
+	testingSet->Add(setSubtract(items, trainingSet->items));\
+	return testingSet;
+}
+
+generic<typename T>
+List<T>^ Items::setSubtract(List<T>^ one, List<T>^ two) {
+	List<T>^ result = gcnew List<T>(one);
+	for each (T item in two) {
+		result->Remove(item);
 	}
 	return result;
 }
