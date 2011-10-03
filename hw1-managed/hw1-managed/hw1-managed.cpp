@@ -1,7 +1,7 @@
 // hw1-managed.cpp : main project file.
 
 #include "stdafx.h"
-#include "Items.h"
+#include "DecisionTree.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -38,6 +38,13 @@ int main(array<String^> ^args)
 			attributeDict->Add(attributeNames[i], attributes[i]);
 		}
 		items->Add(gcnew Item(attributeDict));
+	}
+
+	List<DecisionTree^>^ decisionTrees = gcnew List<DecisionTree^>();
+	for (int i = 0; i < numberOfTrials; ++i) {
+		Items^ trainingSet = items->getTrainingSet(trainingSetSize);
+		Items^ testingSet = items->getTestingSet(trainingSet);
+		decisionTrees->Add(gcnew DecisionTree(trainingSet));
 	}
 
     return 0;
