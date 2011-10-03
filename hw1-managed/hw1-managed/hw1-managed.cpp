@@ -19,7 +19,7 @@ int main(array<String^> ^args)
     String^ inputFileName = argsList[0];
 	int trainingSetSize = Convert::ToInt32(argsList[1]);
 	int numberOfTrials = Convert::ToInt32(argsList[2]);
-	bool verbose = Convert::ToBoolean(argsList[3]);
+	bool verbose = argsList[3]->Equals("1") ? true : false;
 
 	// Read in the dataset
 	StreamReader^ dataset = gcnew StreamReader(inputFileName);
