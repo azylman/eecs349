@@ -53,8 +53,10 @@ int main(array<String^> ^args)
 		}
 		items->Add(gcnew Item(attributeDict));
 	}
-	items->setAttributes(possibleAttributes);
-
+	items->setAttributes(gcnew Dictionary<String^, List<String^>^>(possibleAttributes));
+	
+	// We don't want this in our attributes to classify in the decision tree.
+	possibleAttributes->Remove("CLASS");
 	List<DecisionTree^>^ decisionTrees = gcnew List<DecisionTree^>();
 	for (int i = 0; i < numberOfTrials; ++i) {
 		Items^ trainingSet = items->getTrainingSet(trainingSetSize);

@@ -22,7 +22,6 @@ public:
 	Items^ getTestingSet(Items^ trainingSet);
 	bool allPositive();
 	bool allNegative();
-	bool attributesEmpty();
 	String^ mostCommonClassification();
 	void setAttributes(Dictionary<String^, List<String^>^>^ attributes);
 	List<Item^>^ filterListByDecisions(Dictionary<String^, String^>^ decisions);

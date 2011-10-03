@@ -11,7 +11,9 @@ Items::Items() {
 double Items::calculateEntropy(int positive, int negative) {
 	double good = (double) positive / (double) (positive + negative);
 	double bad = (double) negative / (double) (positive + negative);
-	return -good * Math::Log(good, 2) - bad * Math::Log(bad, 2);
+	double goodLog = good == 0 ? 0 : -good * Math::Log(good, 2);
+	double badLog = bad == 0 ? 0 : -bad * Math::Log(bad, 2);
+	return goodLog + badLog;
 }
 
 double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ usedClassifications, String^ attribute) {
@@ -41,15 +43,17 @@ double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ us
 
 	int totalItems = originalGood + originalBad;
 
-	double entropy = calculateEntropy(originalGood, originalBad);
+	double totalEntropy = calculateEntropy(originalGood, originalBad);
 	for each (KeyValuePair<String^, int>^ attributeCount in totalItemsByAttribute) {
 		String^ key = attributeCount->Key;
 		int value = attributeCount->Value;
-		entropy -= (double) value / (double) totalItems * calculateEntropy(
-			goodCountsByAttribute->ContainsKey(key) ? goodCountsByAttribute[key] : 0,
-			badCountsByAttribute->ContainsKey(key) ? badCountsByAttribute[key] : 0);
+		int goodCounts = goodCountsByAttribute->ContainsKey(key) ? goodCountsByAttribute[key] : 0;
+		int badCounts = badCountsByAttribute->ContainsKey(key) ? badCountsByAttribute[key] : 0;
+		double modifier = (double) value / (double) totalItems;
+		double entropy =  modifier * calculateEntropy(goodCounts, badCounts);
+		totalEntropy -= entropy;
 	}
-	return entropy;
+	return totalEntropy;
 }
 
 void Items::addOrIncrementKey(Dictionary<String^, int>^ dict, String^ key) {
@@ -70,6 +74,10 @@ void Items::Add(List<Item^>^ items) {
 
 String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassifications) {
 	List<String^>^ attributesToCheck = setSubtract(gcnew List<String^>(attributes->Keys), gcnew List<String^>(usedClassifications->Keys));
+	attributesToCheck->Remove("CLASS");
+	if (attributesToCheck->Count == 1) {
+		return attributesToCheck[0];
+	}
 
 	double maxGain = 0;
 	String^ bestAttribute;
@@ -129,10 +137,10 @@ List<Item^>^ Items::filterListByDecisions(Dictionary<String^, String^>^ decision
 	List<Item^>^ filteredItems = gcnew List<Item^>();
 	if (decisions->Count > 0) {
 		for each(Item^ item in items) {
-			bool add = true;
+			bool add = false;
 			for each(KeyValuePair<String^, String^>^ classification in decisions) {
 				if (!item->GetAttribute(classification->Key)->Equals(classification->Value)) {
-					add = false;
+					add = true;
 				}
 			}
 			if (add) {
@@ -162,10 +170,6 @@ bool Items::allNegative() {
 		}
 	}
 	return true;
-}
-
-bool Items::attributesEmpty() {
-	return attributes->Count == 0;
 }
 
 String^ Items::mostCommonClassification() {
