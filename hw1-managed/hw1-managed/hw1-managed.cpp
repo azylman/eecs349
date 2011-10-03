@@ -1,7 +1,7 @@
 // hw1-managed.cpp : main project file.
 
 #include "stdafx.h"
-#include "Item.h"
+#include "Items.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -26,7 +26,7 @@ int main(array<String^> ^args)
 
 	// Create our items list from our input
 	List<String^>^ attributeNames = gcnew List<String^>(dataset->ReadLine()->Split('\t'));
-	List<Item^>^ items = gcnew List<Item^>();
+	Items^ items = gcnew Items();
 	while (String^ item = dataset->ReadLine()) {
 		List<String^>^ attributes = gcnew List<String^>(item->Split('\t'));
 		Dictionary<String^, String^>^ attributeDict = gcnew Dictionary<String^, String^>();
