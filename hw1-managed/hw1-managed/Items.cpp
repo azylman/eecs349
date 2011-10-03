@@ -78,5 +78,23 @@ void Items::Add(Item^ item) {
 }
 
 String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassifications) {
-	return "";
+	List<String^>^ attributesToCheck = gcnew List<String^>(attributes);
+
+	// Set difference for lists, basically. Check all the attributes we haven't already used.
+	for each(String^ attribute in usedClassifications->Keys) {
+		attributesToCheck->Remove(attribute);
+	}
+
+	double maxGain = 0;
+	String^ bestAttribute;
+
+	for each(String^ attribute in attributesToCheck) {
+		double gain = calculateEntropyGainFromAttribute(usedClassifications, attribute);
+		if (gain > maxGain) {
+			maxGain = gain;
+			bestAttribute = attribute;
+		}
+	}
+
+	return bestAttribute;
 }
