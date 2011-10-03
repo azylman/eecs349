@@ -13,9 +13,6 @@ private:
 	String^ decisionAttribute;
 	Dictionary<String^, List<String^>^>^ attributes;
 	List<DecisionTree^>^ children;
-
-	void printDecisions();
-
 public:
 	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
 	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions);
