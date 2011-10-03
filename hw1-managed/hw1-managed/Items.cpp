@@ -9,8 +9,8 @@ Items::Items() {
 }
 
 double Items::calculateEntropy(int positive, int negative) {
-	double good = positive / (positive + negative);
-	double bad = negative / (positive + negative);
+	double good = (double) positive / (double) (positive + negative);
+	double bad = (double) negative / (double) (positive + negative);
 	return -good * Math::Log(good, 2) - bad * Math::Log(bad, 2);
 }
 
@@ -45,7 +45,7 @@ double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ us
 	for each (KeyValuePair<String^, int>^ attributeCount in totalItemsByAttribute) {
 		String^ key = attributeCount->Key;
 		int value = attributeCount->Value;
-		entropy -= value / totalItems * calculateEntropy(
+		entropy -= (double) value / (double) totalItems * calculateEntropy(
 			goodCountsByAttribute->ContainsKey(key) ? goodCountsByAttribute[key] : 0,
 			badCountsByAttribute->ContainsKey(key) ? badCountsByAttribute[key] : 0);
 	}
