@@ -141,3 +141,21 @@ List<Item^>^ Items::filterListByDecisions(Dictionary<String^, String^>^ decision
 
 	return filteredItems;
 }
+
+bool Items::allPositive() {
+	for each (Item^ item in items) {
+		if (item->GetAttribute("CLASS")->Equals("0")) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Items::allNegative() {
+	for each (Item^ item in items) {
+		if (item->GetAttribute("CLASS")->Equals("1")) {
+			return false;
+		}
+	}
+	return true;
+}

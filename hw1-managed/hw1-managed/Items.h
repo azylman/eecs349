@@ -21,5 +21,7 @@ public:
 	String^ getBestClassifer(Dictionary<String^, String^>^ usedClassifications);
 	Items^ getTrainingSet(int trainingSetSize);
 	Items^ getTestingSet(Items^ trainingSet);
+	bool allPositive();
+	bool allNegative();
 };
 
