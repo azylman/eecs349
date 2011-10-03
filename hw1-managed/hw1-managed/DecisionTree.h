@@ -12,9 +12,12 @@ private:
 	String^ label;
 	String^ decisionAttribute;
 	Dictionary<String^, List<String^>^>^ attributes;
-	List<DecisionTree^>^ children;
+	Dictionary<String^, DecisionTree^>^ children;
+	void print(int depth);
+
 public:
 	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
 	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions);
+	void print();
 };
 

@@ -9,9 +9,9 @@ using namespace System::IO;
 
 void createOrAddToAttribute(Dictionary<String^, List<String^>^>^ attributes, String^ attribute, String^ value) {
 	if (attributes->ContainsKey(attribute)) {
-		List<String^>^ attributeValues = attributes[attribute];
+		HashSet<String^>^ attributeValues = gcnew HashSet<String^>(attributes[attribute]);
 		attributeValues->Add(value);
-		attributes[attribute] = attributeValues;
+		attributes[attribute] = gcnew List<String^>(attributeValues);
 	} else {
 		List<String^>^ list = gcnew List<String^>();
 		list->Add(value);
