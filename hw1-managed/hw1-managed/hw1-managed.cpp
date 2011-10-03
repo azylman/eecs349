@@ -26,7 +26,7 @@ int main(array<String^> ^args)
 
 	// Create our items list from our input
 	List<String^>^ attributeNames = gcnew List<String^>(dataset->ReadLine()->Split('\t'));
-	Items^ items = gcnew Items();
+	Items^ items = gcnew Items(attributeNames);
 	while (String^ item = dataset->ReadLine()) {
 		List<String^>^ attributes = gcnew List<String^>(item->Split('\t'));
 		Dictionary<String^, String^>^ attributeDict = gcnew Dictionary<String^, String^>();
