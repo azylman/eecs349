@@ -15,22 +15,7 @@ double Items::calculateEntropy(int positive, int negative) {
 }
 
 double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ usedClassifications, String^ attribute) {
-	List<Item^>^ filteredItems = gcnew List<Item^>();
-	if (usedClassifications->Count > 0) {
-		for each(Item^ item in items) {
-			bool add = true;
-			for each(KeyValuePair<String^, String^>^ classification in usedClassifications) {
-				if (!item->GetAttribute(classification->Key)->Equals(classification->Value)) {
-					add = false;
-				}
-			}
-			if (add) {
-				filteredItems->Add(item);
-			}
-		}
-	} else {
-		filteredItems = items;
-	}
+	List<Item^>^ filteredItems = filterListByDecisions(usedClassifications);
 
 	int originalGood = 0;
 	int originalBad = 0;
@@ -134,4 +119,25 @@ List<T>^ Items::setSubtract(List<T>^ one, List<T>^ two) {
 		result->Remove(item);
 	}
 	return result;
+}
+
+List<Item^>^ filterListByDecisions(Dictionary<String^, String^> decisions) {
+	List<Item^>^ filteredItems = gcnew List<Item^>();
+	if (decisions->Count > 0) {
+		for each(Item^ item in items) {
+			bool add = true;
+			for each(KeyValuePair<String^, String^>^ classification in usedClassifications) {
+				if (!item->GetAttribute(classification->Key)->Equals(classification->Value)) {
+					add = false;
+				}
+			}
+			if (add) {
+				filteredItems->Add(item);
+			}
+		}
+	} else {
+		filteredItems = items;
+	}
+
+	return filteredItems;
 }
