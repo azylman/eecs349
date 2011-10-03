@@ -8,6 +8,7 @@ DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>
 	children = gcnew Dictionary<String^, DecisionTree^>();
 	decisionAttribute = "";
 	label = "";
+
 	if (trainingSet->Count() == 0) {
 		label = trainingSet->mostCommonClassification();
 	} else if (trainingSet->allPositive()) {
