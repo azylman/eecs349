@@ -45,7 +45,9 @@ double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ us
 	for each (KeyValuePair<String^, int>^ attributeCount in totalItemsByAttribute) {
 		String^ key = attributeCount->Key;
 		int value = attributeCount->Value;
-		entropy -= value / totalItems * calculateEntropy(goodCountsByAttribute[key], badCountsByAttribute[key]);
+		entropy -= value / totalItems * calculateEntropy(
+			goodCountsByAttribute->ContainsKey(key) ? goodCountsByAttribute[key] : 0,
+			badCountsByAttribute->ContainsKey(key) ? badCountsByAttribute[key] : 0);
 	}
 	return entropy;
 }
