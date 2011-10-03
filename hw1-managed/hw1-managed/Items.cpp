@@ -159,3 +159,21 @@ bool Items::allNegative() {
 	}
 	return true;
 }
+
+bool Items::attributesEmpty() {
+	return attributes->Count == 0;
+}
+
+String^ Items::mostCommonClassification() {
+	int zeroes = 0;
+	int ones = 0;
+	for each (Item^ item in items) {
+		if (item->GetAttribute("CLASS")->Equals("0")) {
+			zeroes++;
+		} else {
+			ones++;
+		}
+	}
+
+	return ones > zeroes ? "1" : "0";
+}

@@ -23,5 +23,7 @@ public:
 	Items^ getTestingSet(Items^ trainingSet);
 	bool allPositive();
 	bool allNegative();
+	bool attributesEmpty();
+	String^ mostCommonClassification();
 };
 
