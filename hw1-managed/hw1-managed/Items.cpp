@@ -77,6 +77,10 @@ void Items::Add(Item^ item) {
 	items->Add(item);
 }
 
+void Items::Add(List<Item^>^ items) {
+	this->items->AddRange(items);
+}
+
 String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassifications) {
 	List<String^>^ attributesToCheck = gcnew List<String^>(attributes);
 
@@ -97,4 +101,27 @@ String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassification
 	}
 
 	return bestAttribute;
+}
+
+Items^ Items::getTrainingSet(int trainingSetSize) {
+	Items^ trainingSet = gcnew Items(attributes);
+	if (trainingSetSize > items->Count) {
+		// We should really probably throw an error here, but it should never come up.
+		trainingSet->Add(items);
+		return trainingSet;
+	}
+	HashSet<int>^ indicesToTake = getNRandomNumbersFromAToB(trainingSetSize, 0, items->Count);
+	for each(int i in indicesToTake) {
+		trainingSet->Add(items[i]);
+	}
+	return trainingSet;
+}
+
+HashSet<int>^ Items::getNRandomNumbersFromAToB(int n, int a, int b) {
+	HashSet<int>^ result = gcnew HashSet<int>();
+	Random^ rnd = gcnew Random();
+	while(result->Count < n) {
+		result->Add(rnd->Next(a, b));
+	}
+	return result;
 }
