@@ -59,7 +59,7 @@ int main(array<String^> ^args)
 	for (int i = 0; i < numberOfTrials; ++i) {
 		Items^ trainingSet = items->getTrainingSet(trainingSetSize);
 		Items^ testingSet = items->getTestingSet(trainingSet);
-		decisionTrees->Add(gcnew DecisionTree(trainingSet));
+		decisionTrees->Add(gcnew DecisionTree(trainingSet, possibleAttributes));
 	}
 
     return 0;

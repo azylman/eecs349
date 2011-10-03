@@ -11,8 +11,10 @@ private:
 	Dictionary<String^, String^>^ decisions;
 	String^ label;
 	String^ decisionAttribute;
+	Dictionary<String^, List<String^>^>^ attributes;
+	List<DecisionTree^>^ children;
 public:
-	DecisionTree(Items^ trainingSet);
-	DecisionTree(Items^ trainingSet, Dictionary<String^, String^>^ decisions);
+	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
+	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions);
 };
 

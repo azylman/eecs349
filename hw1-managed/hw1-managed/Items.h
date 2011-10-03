@@ -13,7 +13,6 @@ private:
 	HashSet<int>^ getNRandomNumbersFromAToB(int n, int a, int b);
 	generic<typename T>
 	List<T>^ setSubtract(List<T>^ one, List<T>^ two);
-	List<Item^>^ filterListByDecisions(Dictionary<String^, String^>^ decisions);
 public:
 	Items();
 	void Add(Item^ item);
@@ -26,5 +25,6 @@ public:
 	bool attributesEmpty();
 	String^ mostCommonClassification();
 	void setAttributes(Dictionary<String^, List<String^>^>^ attributes);
+	List<Item^>^ filterListByDecisions(Dictionary<String^, String^>^ decisions);
 };
 
