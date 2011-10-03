@@ -9,5 +9,6 @@ private:
 	Dictionary<String^, String^>^ attributes;
 public:
 	Item(Dictionary<String^, String^>^ attributes);
+	String^ GetAttribute(String^ attribute);
 };
 
