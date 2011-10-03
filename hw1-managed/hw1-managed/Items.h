@@ -6,6 +6,7 @@ ref class Items
 {
 private:
 	List<Item^>^ items;
+	double calculateEntropy(int positive, int negative);
 public:
 	Items(void);
 	void Add(Item^ item);
