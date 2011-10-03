@@ -24,6 +24,7 @@ public:
 	bool allNegative();
 	String^ mostCommonClassification();
 	void setAttributes(Dictionary<String^, List<String^>^>^ attributes);
-	List<Item^>^ filterListByDecisions(Dictionary<String^, String^>^ decisions);
+	Items^ filterListByDecisions(Dictionary<String^, String^>^ decisions);
+	int Count();
 };
 

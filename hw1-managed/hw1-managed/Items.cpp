@@ -17,7 +17,7 @@ double Items::calculateEntropy(int positive, int negative) {
 }
 
 double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ usedClassifications, String^ attribute) {
-	List<Item^>^ filteredItems = filterListByDecisions(usedClassifications);
+	Items^ filteredItems = filterListByDecisions(usedClassifications);
 
 	int originalGood = 0;
 	int originalBad = 0;
@@ -25,7 +25,7 @@ double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ us
 	Dictionary<String^, int>^ badCountsByAttribute = gcnew Dictionary<String^, int>();
 	Dictionary<String^, int>^ totalItemsByAttribute = gcnew Dictionary<String^, int>();
 
-	for each (Item^ item in filteredItems) {
+	for each (Item^ item in filteredItems->items) {
 		if (item->GetAttribute("CLASS")->Equals("1")) {
 			originalGood++;
 
@@ -133,8 +133,8 @@ List<T>^ Items::setSubtract(List<T>^ one, List<T>^ two) {
 	return result;
 }
 
-List<Item^>^ Items::filterListByDecisions(Dictionary<String^, String^>^ decisions) {
-	List<Item^>^ filteredItems = gcnew List<Item^>();
+Items^ Items::filterListByDecisions(Dictionary<String^, String^>^ decisions) {
+	Items^ filteredItems = gcnew Items();
 	if (decisions->Count > 0) {
 		for each(Item^ item in items) {
 			bool add = false;
@@ -148,9 +148,9 @@ List<Item^>^ Items::filterListByDecisions(Dictionary<String^, String^>^ decision
 			}
 		}
 	} else {
-		filteredItems = items;
+		return this;
 	}
-
+	filteredItems->setAttributes(attributes);
 	return filteredItems;
 }
 
@@ -188,4 +188,8 @@ String^ Items::mostCommonClassification() {
 
 void Items::setAttributes(Dictionary<String^, List<String^>^>^ attributes) {
 	this->attributes = attributes;
+}
+
+int Items::Count() {
+	return items->Count;
 }

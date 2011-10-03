@@ -58,10 +58,16 @@ int main(array<String^> ^args)
 	// We don't want this in our attributes to classify in the decision tree.
 	possibleAttributes->Remove("CLASS");
 	List<DecisionTree^>^ decisionTrees = gcnew List<DecisionTree^>();
+	DecisionTree^ tree;
 	for (int i = 0; i < numberOfTrials; ++i) {
 		Items^ trainingSet = items->getTrainingSet(trainingSetSize);
 		Items^ testingSet = items->getTestingSet(trainingSet);
-		decisionTrees->Add(gcnew DecisionTree(trainingSet, possibleAttributes));
+		tree = gcnew DecisionTree(trainingSet, possibleAttributes);
+		decisionTrees->Add(tree);
+	}
+
+	for each (DecisionTree^ tree in decisionTrees) {
+		tree->print();
 	}
 
     return 0;
