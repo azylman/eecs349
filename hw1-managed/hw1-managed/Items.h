@@ -9,5 +9,6 @@ private:
 public:
 	Items(void);
 	void Add(Item^ item);
+	String^ getBestClassifer(Dictionary<String^, String^> assumedClassifications);
 };
 

@@ -9,3 +9,7 @@ Items::Items(void) {
 void Items::Add(Item^ item) {
 	items->Add(item);
 }
+
+String^ Items::getBestClassifer(Dictionary<String^, String^> assumedClassifications) {
+
+}
