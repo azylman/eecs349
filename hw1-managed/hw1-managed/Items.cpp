@@ -56,16 +56,16 @@ double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ us
 
 	int totalItems = originalGood + originalBad;
 
-	double entropy = calculateEntropy;
-	for each (KeyValuePair<String^, int> attributeCount in totalItemsByAttribute) {
+	double entropy = calculateEntropy(originalGood, originalBad);
+	for each (KeyValuePair<String^, int>^ attributeCount in totalItemsByAttribute) {
 		String^ key = attributeCount->Key;
-		int value = attributeCount->Value
-		entropy -= key / totalItems * calculateEntropy(goodCountsByAttribute[value], badCountsByAttribute[value]);
+		int value = attributeCount->Value;
+		entropy -= value / totalItems * calculateEntropy(goodCountsByAttribute[key], badCountsByAttribute[key]);
 	}
 	return entropy;
 }
 
-void Items::addOrIncrementKey(Dictionary^<String^, int> dict, String^ key) {
+void Items::addOrIncrementKey(Dictionary<String^, int>^ dict, String^ key) {
 	if (dict->ContainsKey(key)) {
 		dict[key]++;
 	} else {

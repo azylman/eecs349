@@ -9,7 +9,7 @@ private:
 	List<String^>^ attributes;
 	double calculateEntropy(int positive, int negative);
 	double calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ usedClassifications, String^ attribute);
-	void addOrIncrementKey(Dictionary^<String^, int> dict, String^ key);
+	void addOrIncrementKey(Dictionary<String^, int>^ dict, String^ key);
 public:
 	Items(List<String^>^ attributes);
 	void Add(Item^ item);
