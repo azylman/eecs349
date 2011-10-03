@@ -121,12 +121,12 @@ List<T>^ Items::setSubtract(List<T>^ one, List<T>^ two) {
 	return result;
 }
 
-List<Item^>^ filterListByDecisions(Dictionary<String^, String^> decisions) {
+List<Item^>^ Items::filterListByDecisions(Dictionary<String^, String^>^ decisions) {
 	List<Item^>^ filteredItems = gcnew List<Item^>();
 	if (decisions->Count > 0) {
 		for each(Item^ item in items) {
 			bool add = true;
-			for each(KeyValuePair<String^, String^>^ classification in usedClassifications) {
+			for each(KeyValuePair<String^, String^>^ classification in decisions) {
 				if (!item->GetAttribute(classification->Key)->Equals(classification->Value)) {
 					add = false;
 				}
