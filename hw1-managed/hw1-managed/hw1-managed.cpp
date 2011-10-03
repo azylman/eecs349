@@ -7,6 +7,18 @@ using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::IO;
 
+void createOrAddToAttribute(Dictionary<String^, List<String^>^>^ attributes, String^ attribute, String^ value) {
+	if (attributes->ContainsKey(attribute)) {
+		List<String^>^ attributeValues = attributes[attribute];
+		attributeValues->Add(value);
+		attributes[attribute] = attributeValues;
+	} else {
+		List<String^>^ list = gcnew List<String^>();
+		list->Add(value);
+		attributes->Add(attribute, list);
+	}
+}
+
 int main(array<String^> ^args)
 {
 	List<String^>^ argsList = gcnew List<String^>(args);
@@ -26,7 +38,8 @@ int main(array<String^> ^args)
 
 	// Create our items list from our input
 	List<String^>^ attributeNames = gcnew List<String^>(dataset->ReadLine()->Split('\t'));
-	Items^ items = gcnew Items(attributeNames);
+	Dictionary<String^, List<String^>^>^ possibleAttributes = gcnew Dictionary<String^, List<String^>^>();
+	Items^ items = gcnew Items();
 	while (String^ item = dataset->ReadLine()) {
 		List<String^>^ attributes = gcnew List<String^>(item->Split('\t'));
 		Dictionary<String^, String^>^ attributeDict = gcnew Dictionary<String^, String^>();
@@ -36,9 +49,11 @@ int main(array<String^> ^args)
 		}
 		for (int i = 0; i < attributes->Count; ++i) {
 			attributeDict->Add(attributeNames[i], attributes[i]);
+			createOrAddToAttribute(possibleAttributes, attributeNames[i], attributes[i]);
 		}
 		items->Add(gcnew Item(attributeDict));
 	}
+	items->setAttributes(possibleAttributes);
 
 	List<DecisionTree^>^ decisionTrees = gcnew List<DecisionTree^>();
 	for (int i = 0; i < numberOfTrials; ++i) {

@@ -10,6 +10,8 @@ DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, String^>^ dec
 	} else if (trainingSet->attributesEmpty()) {
 		label = trainingSet->mostCommonClassification();
 	} else {
+		decisionAttribute = trainingSet->getBestClassifer(decisions);
+
 	}
 }
 

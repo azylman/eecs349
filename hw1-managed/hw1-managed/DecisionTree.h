@@ -10,6 +10,7 @@ private:
 	Items^ trainingSet;
 	Dictionary<String^, String^>^ decisions;
 	String^ label;
+	String^ decisionAttribute;
 public:
 	DecisionTree(Items^ trainingSet);
 	DecisionTree(Items^ trainingSet, Dictionary<String^, String^>^ decisions);

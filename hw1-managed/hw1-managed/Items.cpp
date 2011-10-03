@@ -4,7 +4,7 @@
 using namespace System;
 using namespace System::Collections::Generic;
 
-Items::Items(List<String^>^ attributes) : attributes(attributes) {
+Items::Items() {
 	items = gcnew List<Item^>();
 }
 
@@ -67,7 +67,7 @@ void Items::Add(List<Item^>^ items) {
 }
 
 String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassifications) {
-	List<String^>^ attributesToCheck = setSubtract(attributes, gcnew List<String^>(usedClassifications->Keys));
+	List<String^>^ attributesToCheck = setSubtract(gcnew List<String^>(attributes->Keys), gcnew List<String^>(usedClassifications->Keys));
 
 	double maxGain = 0;
 	String^ bestAttribute;
@@ -84,7 +84,7 @@ String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassification
 }
 
 Items^ Items::getTrainingSet(int trainingSetSize) {
-	Items^ trainingSet = gcnew Items(attributes);
+	Items^ trainingSet = gcnew Items();
 	if (trainingSetSize > items->Count) {
 		// We should really probably throw an error here, but it should never come up.
 		trainingSet->Add(items);
@@ -94,6 +94,7 @@ Items^ Items::getTrainingSet(int trainingSetSize) {
 	for each(int i in indicesToTake) {
 		trainingSet->Add(items[i]);
 	}
+	trainingSet->setAttributes(attributes);
 	return trainingSet;
 }
 
@@ -107,8 +108,9 @@ HashSet<int>^ Items::getNRandomNumbersFromAToB(int n, int a, int b) {
 }
 
 Items^ Items::getTestingSet(Items^ trainingSet) {
-	Items^ testingSet = gcnew Items(attributes);
-	testingSet->Add(setSubtract(items, trainingSet->items));\
+	Items^ testingSet = gcnew Items();
+	testingSet->Add(setSubtract(items, trainingSet->items));
+	trainingSet->setAttributes(attributes);
 	return testingSet;
 }
 
@@ -176,4 +178,8 @@ String^ Items::mostCommonClassification() {
 	}
 
 	return ones > zeroes ? "1" : "0";
+}
+
+void Items::setAttributes(Dictionary<String^, List<String^>^>^ attributes) {
+	this->attributes = attributes;
 }
