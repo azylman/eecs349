@@ -1,6 +1,0 @@
-Origin	Manufacturer	Color	Decade	Type	CLASS
-Japan	Honda	Blue	1980	Economy	1
-Japan	Toyota	Green	1970	Sports	0
-Japan	Toyota	Blue	1990	Economy	1
-USA	Chrysler	Red	1980	Economy	0
-Japan	Honda	White	1980	Economy	1
