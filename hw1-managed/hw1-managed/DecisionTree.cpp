@@ -5,7 +5,6 @@
 DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions)
 		: trainingSet(trainingSet), attributes(attributes), decisions(decisions) {
 
-	printDecisions();
 	if (trainingSet->filterListByDecisions(decisions)->Count == 0) {
 		label = trainingSet->mostCommonClassification();
 	} else if (trainingSet->allPositive()) {
@@ -29,11 +28,4 @@ DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>
 
 DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes) {
 	DecisionTree(trainingSet, attributes, gcnew Dictionary<String^, String^>());
-}
-
-void DecisionTree::printDecisions() {
-	String^ decisionString = "";
-	for each (KeyValuePair<String^, String^>^ decision in decisions) {
-		decisionString += decision->Key + ": " + decision->Value;
-	}
 }
