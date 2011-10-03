@@ -80,6 +80,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DecisionTree.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="resource.h" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="DecisionTree.cpp" />
     <ClCompile Include="hw1-managed.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Items.cpp" />
