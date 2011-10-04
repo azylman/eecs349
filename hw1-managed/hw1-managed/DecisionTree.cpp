@@ -17,8 +17,9 @@ void DecisionTree::build(Items^ trainingSet, Dictionary<String^, List<String^>^>
 	} else {
 		decisionAttribute = trainingSet->getBestClassifer(decisions);
 		Dictionary<String^, List<String^>^>^ newAttributes = gcnew Dictionary<String^, List<String^>^>(attributes);
+		List<String^>^ possibleValues = attributes[decisionAttribute];
 		newAttributes->Remove(decisionAttribute);
-		for each (String^ value in attributes[decisionAttribute]) {
+		for each (String^ value in possibleValues) {
 			Dictionary<String^, String^>^ newDecisions = gcnew Dictionary<String^, String^>(decisions);
 			Items^ newTrainingSet = trainingSet->filterListByDecisions(newDecisions);
 			newDecisions->Add(decisionAttribute, value);
@@ -42,7 +43,7 @@ void DecisionTree::print() {
 void DecisionTree::print(int depth) {
 	String^ indent = "";
 	for (int i = 0; i < depth; ++i) {
-		indent += "\t";
+		indent += "  ";
 	}
 	for each (KeyValuePair<String^, DecisionTree^>^ child in children) {
 		Console::WriteLine(indent + decisionAttribute + " = " + child->Key);

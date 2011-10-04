@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include "DecisionTree.h"
-#include "DecisionTreeLearner.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -59,14 +58,17 @@ int main(array<String^> ^args)
 	// We don't want this in our attributes to classify in the decision tree.
 	possibleAttributes->Remove("CLASS");
 	List<DecisionTree^>^ decisionTrees = gcnew List<DecisionTree^>();
-	DecisionTreeLearner^ learner = gcnew DecisionTreeLearner(possibleAttributes);
-	for (int i = 0; i < trainingSetSize; ++i) {
+	for (int i = 0; i < numberOfTrials; ++i) {
 		Items^ trainingSet = items->getTrainingSet(trainingSetSize);
 		Items^ testingSet = items->getTestingSet(trainingSet);
-		decisionTrees->Add(gcnew DecisionTree(trainingSet, testingSet, possibleAttributes));
+		decisionTrees->Add(gcnew DecisionTree(trainingSet, testingSet, gcnew Dictionary<String^, List<String^>^>(possibleAttributes)));
 	}
 
+	int numTrees = 0;
 	for each (DecisionTree^ tree in decisionTrees) {
+		Console::WriteLine("");
+		Console::WriteLine("Trial " + numTrees++);
+		Console::WriteLine("----------------------------");
 		tree->print();
 	}
 
