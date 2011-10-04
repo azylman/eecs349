@@ -8,7 +8,7 @@ private:
 	List<Item^>^ items;
 	Dictionary<String^, List<String^>^>^ attributes;
 	double calculateEntropy(int positive, int negative);
-	double calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ usedClassifications, String^ attribute);
+	double calculateEntropyGainFromAttribute(String^ attribute);
 	void addOrIncrementKey(Dictionary<String^, int>^ dict, String^ key);
 	HashSet<int>^ getNRandomNumbersFromAToB(int n, int a, int b);
 	generic<typename T>
@@ -17,7 +17,7 @@ public:
 	Items();
 	void Add(Item^ item);
 	void Add(List<Item^>^ items);
-	String^ getBestClassifer(Dictionary<String^, String^>^ usedClassifications);
+	String^ getBestClassifer(Dictionary<String^, List<String^>^>^ attributes);
 	Items^ getTrainingSet(int trainingSetSize);
 	Items^ getTestingSet(Items^ trainingSet);
 	bool allPositive();

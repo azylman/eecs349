@@ -16,7 +16,7 @@ double Items::calculateEntropy(int positive, int negative) {
 	return goodLog + badLog;
 }
 
-double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ usedClassifications, String^ attribute) {
+double Items::calculateEntropyGainFromAttribute(String^ attribute) {
 
 	int originalGood = 0;
 	int originalBad = 0;
@@ -71,9 +71,8 @@ void Items::Add(List<Item^>^ items) {
 	this->items->AddRange(items);
 }
 
-String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassifications) {
-	List<String^>^ attributesToCheck = setSubtract(gcnew List<String^>(attributes->Keys), gcnew List<String^>(usedClassifications->Keys));
-	attributesToCheck->Remove("CLASS");
+String^ Items::getBestClassifer(Dictionary<String^, List<String^>^>^ attributes) {
+	List<String^>^ attributesToCheck = gcnew List<String^>(attributes->Keys);
 	if (attributesToCheck->Count == 1) {
 		return attributesToCheck[0];
 	}
@@ -82,7 +81,7 @@ String^ Items::getBestClassifer(Dictionary<String^, String^>^ usedClassification
 	String^ bestAttribute;
 
 	for each(String^ attribute in attributesToCheck) {
-		double gain = calculateEntropyGainFromAttribute(usedClassifications, attribute);
+		double gain = calculateEntropyGainFromAttribute(attribute);
 		if (gain > maxGain) {
 			maxGain = gain;
 			bestAttribute = attribute;

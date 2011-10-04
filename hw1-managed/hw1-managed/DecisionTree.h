@@ -13,11 +13,12 @@ private:
 	String^ decisionAttribute;
 	Dictionary<String^, DecisionTree^>^ children;
 	void print(int depth);
-	void build(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions);
+	void build(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
+	void initValues();
 
 public:
 	DecisionTree(Items^ trainingSet, Items^ testingSet, Dictionary<String^, List<String^>^>^ attributes);
-	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions);
+	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
 	void print();
 };
 
