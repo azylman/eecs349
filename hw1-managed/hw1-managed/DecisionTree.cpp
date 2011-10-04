@@ -21,8 +21,8 @@ void DecisionTree::build(Items^ trainingSet, Dictionary<String^, List<String^>^>
 		newAttributes->Remove(decisionAttribute);
 		for each (String^ value in possibleValues) {
 			Dictionary<String^, String^>^ newDecisions = gcnew Dictionary<String^, String^>(decisions);
-			Items^ newTrainingSet = trainingSet->filterListByDecisions(newDecisions);
 			newDecisions->Add(decisionAttribute, value);
+			Items^ newTrainingSet = trainingSet->filterListByDecisions(newDecisions);
 			children->Add(value, gcnew DecisionTree(newTrainingSet, newAttributes, newDecisions));
 		}
 	}

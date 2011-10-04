@@ -17,7 +17,6 @@ double Items::calculateEntropy(int positive, int negative) {
 }
 
 double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ usedClassifications, String^ attribute) {
-	Items^ filteredItems = filterListByDecisions(usedClassifications);
 
 	int originalGood = 0;
 	int originalBad = 0;
@@ -25,7 +24,7 @@ double Items::calculateEntropyGainFromAttribute(Dictionary<String^, String^>^ us
 	Dictionary<String^, int>^ badCountsByAttribute = gcnew Dictionary<String^, int>();
 	Dictionary<String^, int>^ totalItemsByAttribute = gcnew Dictionary<String^, int>();
 
-	for each (Item^ item in filteredItems->items) {
+	for each (Item^ item in items) {
 		if (item->GetAttribute("CLASS")->Equals("1")) {
 			originalGood++;
 
