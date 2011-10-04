@@ -1,10 +1,7 @@
 #include "StdAfx.h"
 #include "DecisionTree.h"
 
-
-DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions)
-		: trainingSet(trainingSet), attributes(attributes), decisions(decisions) {
-
+void DecisionTree::build(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions) {
 	children = gcnew Dictionary<String^, DecisionTree^>();
 	decisionAttribute = "";
 	label = "";
@@ -30,8 +27,12 @@ DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>
 	}
 }
 
-DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes) {
-	DecisionTree(trainingSet, attributes, gcnew Dictionary<String^, String^>());
+DecisionTree::DecisionTree(Items^ trainingSet, Items^ testingSet, Dictionary<String^, List<String^>^>^ attributes) : trainingSet(trainingSet), testingSet(testingSet) {
+	build(trainingSet, attributes, gcnew Dictionary<String^, String^>());
+}
+
+DecisionTree::DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes, Dictionary<String^, String^>^ decisions) {
+	build(trainingSet, attributes, decisions);
 }
 
 void DecisionTree::print() {
