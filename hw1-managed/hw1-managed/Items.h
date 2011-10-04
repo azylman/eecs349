@@ -26,5 +26,6 @@ public:
 	void setAttributes(Dictionary<String^, List<String^>^>^ attributes);
 	Items^ filterListByDecisions(Dictionary<String^, String^>^ decisions);
 	int Count();
+	virtual String^ ToString() override;
 };
 

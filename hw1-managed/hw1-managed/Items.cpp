@@ -132,13 +132,14 @@ List<T>^ Items::setSubtract(List<T>^ one, List<T>^ two) {
 }
 
 Items^ Items::filterListByDecisions(Dictionary<String^, String^>^ decisions) {
+	String^ list = "";
 	Items^ filteredItems = gcnew Items();
 	if (decisions->Count > 0) {
 		for each(Item^ item in items) {
-			bool add = false;
+			bool add = true;
 			for each(KeyValuePair<String^, String^>^ classification in decisions) {
 				if (!item->GetAttribute(classification->Key)->Equals(classification->Value)) {
-					add = true;
+					add = false;
 				}
 			}
 			if (add) {
@@ -190,4 +191,12 @@ void Items::setAttributes(Dictionary<String^, List<String^>^>^ attributes) {
 
 int Items::Count() {
 	return items->Count;
+}
+
+String^ Items::ToString() {
+	String^ result = "[";
+	for each (Item^ item in items) {
+		result += item->ToString() + ",";
+	}
+	return result->Trim(',') + "]";
 }

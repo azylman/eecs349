@@ -6,9 +6,9 @@ void DecisionTree::build(Items^ trainingSet, Dictionary<String^, List<String^>^>
 		label = trainingSet->mostCommonClassification();
 		Console::WriteLine("trainingSet is empty and label is " + label);
 	} else if (trainingSet->allPositive()) {
-		label = "+";
+		label = "1";
 	} else if (trainingSet->allNegative()) {
-		label = "-";
+		label = "0";
 	} else if (attributes->Count == 0) {
 		label = trainingSet->mostCommonClassification();
 		Console::WriteLine("attributes is empty and label is " + label);
