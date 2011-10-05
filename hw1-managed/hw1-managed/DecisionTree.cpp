@@ -51,17 +51,26 @@ void DecisionTree::initValues() {
 }
 
 void DecisionTree::print() {
-	print(0);
+	if (verbose) {
+		Console::WriteLine("Training set:");
+		Console::WriteLine(trainingSet->ToString());
+		Console::WriteLine("");
+
+		Console::WriteLine("Testing set:");
+		Console::WriteLine(testingSet->ToString());
+		Console::WriteLine("");
+	}
+	print(verbose, 0);
 }
 
-void DecisionTree::print(int depth) {
+void DecisionTree::print(bool verbose, int depth) {
 	String^ indent = "";
 	for (int i = 0; i < depth; ++i) {
 		indent += "  ";
 	}
 	for each (KeyValuePair<String^, DecisionTree^>^ child in children) {
 		Console::WriteLine(indent + decisionAttribute + " = " + child->Key);
-		child->Value->print(depth+1);
+		child->Value->print(verbose, depth+1);
 	}
 	if (children->Count == 0) {
 		Console::WriteLine(indent + decisionAttribute + label);
@@ -84,8 +93,14 @@ double DecisionTree::classify(Items^ dataset) {
 	for each (Item^ item in dataset->getItems()) {
 		if (classify(item)) {
 			correct++;
+			if (verbose) {
+				Console::WriteLine("Tree classified " + item->ToString() + " as " + item->isPositive() + " (correct)");
+			}
 		} else {
 			incorrect++;
+			if (verbose) {
+				Console::WriteLine("Tree classified " + item->ToString() + " as " + !item->isPositive() + " (incorrect)");
+			}
 		}
 	}
 
@@ -110,13 +125,24 @@ double DecisionTree::priorClassify(Items^ dataset) {
 		bool classifiedAsPositive = priorProbability > num;
 		if (classifiedAsPositive == item->isPositive()) {
 			correct++;
+			if (verbose) {
+				Console::WriteLine("Prior classified " + item->ToString() + " as " + item->isPositive() + " (correct)");
+			}
 		} else {
 			incorrect++;
+			if (verbose) {
+				Console::WriteLine("Prior classified " + item->ToString() + " as " + !item->isPositive() + " (incorrect)");
+			}
 		}
 	}
 
 	return (double) correct / (double) (correct + incorrect);
 }
+
 double DecisionTree::priorClassifyTestSet() {
 	return priorClassify(testingSet);
+}
+
+void DecisionTree::setVerbosePrinting(bool verbose) {
+	this->verbose = verbose;
 }

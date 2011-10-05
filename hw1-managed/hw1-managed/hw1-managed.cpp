@@ -73,7 +73,9 @@ int main(array<String^> ^args)
 	for (int i = 0; i < numberOfTrials; ++i) {
 		trainingSet = items->getTrainingSet(trainingSetSize);
 		testingSet = items->getTestingSet(trainingSet);
-		decisionTrees->Add(gcnew DecisionTree(trainingSet, testingSet, gcnew Dictionary<String^, List<String^>^>(possibleAttributes)));
+		DecisionTree^ tree = gcnew DecisionTree(trainingSet, testingSet, gcnew Dictionary<String^, List<String^>^>(possibleAttributes));
+		tree->setVerbosePrinting(verbose);
+		decisionTrees->Add(tree);
 	}
 
 	double treePassing = 0;

@@ -195,7 +195,7 @@ String^ Items::ToString() {
 	for each (Item^ item in items) {
 		result += item->ToString() + "\n";
 	}
-	return result->Trim(',') + "}";
+	return result->Trim('\n') + "}";
 }
 
 List<Item^>^ Items::getItems() {
