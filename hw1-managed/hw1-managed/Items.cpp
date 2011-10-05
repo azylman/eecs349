@@ -179,7 +179,7 @@ String^ Items::mostCommonClassification() {
 		}
 	}
 
-	return ones > zeroes ? "1" : "0";
+	return ones > zeroes ? "true" : "false";
 }
 
 void Items::setAttributes(Dictionary<String^, List<String^>^>^ attributes) {

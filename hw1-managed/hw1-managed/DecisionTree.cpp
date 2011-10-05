@@ -5,9 +5,9 @@ void DecisionTree::build(Items^ trainingSet, Dictionary<String^, List<String^>^>
 	if (trainingSet->Count() == 0) {
 		label = trainingSet->mostCommonClassification();
 	} else if (trainingSet->allPositive()) {
-		label = "1";
+		label = "true";
 	} else if (trainingSet->allNegative()) {
-		label = "0";
+		label = "false";
 	} else if (attributes->Count == 0) {
 		label = trainingSet->mostCommonClassification();
 	} else {
