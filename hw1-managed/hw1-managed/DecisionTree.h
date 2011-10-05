@@ -22,6 +22,7 @@ private:
 public:
 	DecisionTree(Items^ trainingSet, Items^ testingSet, Dictionary<String^, List<String^>^>^ attributes);
 	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
+	DecisionTree(String^ label);
 	void print();
 	double classify(Items^ dataset);
 	double classifyTestSet();

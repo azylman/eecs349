@@ -16,10 +16,12 @@ String^ Item::ToString() {
 	return string->Trim() + "]";
 }
 
+// Returns whether or not the item is positive
 bool Item::isPositive() {
 	return valueIsPositive(attributes["CLASS"]);
 }
 
+// The conditions for specifying positive vs negative - currently we support "1" (for Cars.txt) and "true" (for MajorityRule and IvyLeague)
 bool Item::valueIsPositive(String^ value) {
 	return value->Equals("1") || value->ToLower()->Equals("true");
 }

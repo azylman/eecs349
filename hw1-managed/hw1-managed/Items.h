@@ -6,7 +6,6 @@ ref class Items
 {
 private:
 	List<Item^>^ items;
-	Dictionary<String^, List<String^>^>^ attributes;
 	double calculateEntropy(int positive, int negative);
 	double calculateEntropyGainFromAttribute(String^ attribute);
 	void addOrIncrementKey(Dictionary<String^, int>^ dict, String^ key);
@@ -23,7 +22,6 @@ public:
 	bool allPositive();
 	bool allNegative();
 	String^ mostCommonClassification();
-	void setAttributes(Dictionary<String^, List<String^>^>^ attributes);
 	Items^ filterListByDecisions(Dictionary<String^, String^>^ decisions);
 	int Count();
 	virtual String^ ToString() override;
