@@ -9,9 +9,9 @@ String^ Item::GetAttribute(String^ attribute) {
 }
 
 String^ Item::ToString() {
-	String^ string = "";
+	String^ string = "[";
 	for each (KeyValuePair<String^, String^>^ attribute in attributes) {
 		string += attribute->Value + " ";
 	}
-	return string->Trim();
+	return string->Trim() + "]";
 }

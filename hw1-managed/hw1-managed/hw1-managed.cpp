@@ -37,7 +37,13 @@ int main(array<String^> ^args)
 	StreamReader^ dataset = gcnew StreamReader(inputFileName);
 
 	// Create our items list from our input
-	List<String^>^ attributeNames = gcnew List<String^>(dataset->ReadLine()->Split('\t'));
+	List<String^>^ possibleAttributeNames = gcnew List<String^>(dataset->ReadLine()->Split());
+	List<String^>^ attributeNames = gcnew List<String^>();
+	for each(String^ attribute in possibleAttributeNames) {
+		if (!String::IsNullOrEmpty(attribute->Trim())) {
+			attributeNames->Add(attribute);
+		}
+	}
 	Dictionary<String^, List<String^>^>^ possibleAttributes = gcnew Dictionary<String^, List<String^>^>();
 	Items^ items = gcnew Items();
 	while (String^ item = dataset->ReadLine()) {
@@ -48,8 +54,10 @@ int main(array<String^> ^args)
 			return -1;
 		}
 		for (int i = 0; i < attributes->Count; ++i) {
-			attributeDict->Add(attributeNames[i], attributes[i]);
-			createOrAddToAttribute(possibleAttributes, attributeNames[i], attributes[i]);
+			String^ name = attributeNames[i]->Trim();
+			String^ value = attributes[i]->Trim();
+			attributeDict->Add(name, value);
+			createOrAddToAttribute(possibleAttributes, name, value);
 		}
 		items->Add(gcnew Item(attributeDict));
 	}
@@ -64,7 +72,7 @@ int main(array<String^> ^args)
 		decisionTrees->Add(gcnew DecisionTree(trainingSet, testingSet, gcnew Dictionary<String^, List<String^>^>(possibleAttributes)));
 	}
 
-	int numTrees = 0;
+	int numTrees = 1;
 	for each (DecisionTree^ tree in decisionTrees) {
 		Console::WriteLine("");
 		Console::WriteLine("Trial " + numTrees++);

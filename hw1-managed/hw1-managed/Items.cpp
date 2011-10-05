@@ -25,18 +25,16 @@ double Items::calculateEntropyGainFromAttribute(String^ attribute) {
 	Dictionary<String^, int>^ totalItemsByAttribute = gcnew Dictionary<String^, int>();
 
 	for each (Item^ item in items) {
-		if (item->GetAttribute("CLASS")->Equals("1")) {
+		if (valueIsPositive(item->GetAttribute("CLASS"))) {
 			originalGood++;
 
 			addOrIncrementKey(goodCountsByAttribute, item->GetAttribute(attribute));
 			addOrIncrementKey(totalItemsByAttribute, item->GetAttribute(attribute));
-		} else if (item->GetAttribute("CLASS")->Equals("0")) {
+		} else {
 			originalBad++;
 
 			addOrIncrementKey(badCountsByAttribute, item->GetAttribute(attribute));
 			addOrIncrementKey(totalItemsByAttribute, item->GetAttribute(attribute));
-		} else {
-			// We're assuming that our dataset is valid - otherwise, this should throw an exception.
 		}
 	}
 
@@ -132,7 +130,6 @@ List<T>^ Items::setSubtract(List<T>^ one, List<T>^ two) {
 }
 
 Items^ Items::filterListByDecisions(Dictionary<String^, String^>^ decisions) {
-	String^ list = "";
 	Items^ filteredItems = gcnew Items();
 	if (decisions->Count > 0) {
 		for each(Item^ item in items) {
@@ -155,7 +152,7 @@ Items^ Items::filterListByDecisions(Dictionary<String^, String^>^ decisions) {
 
 bool Items::allPositive() {
 	for each (Item^ item in items) {
-		if (item->GetAttribute("CLASS")->Equals("0")) {
+		if (!valueIsPositive(item->GetAttribute("CLASS"))) {
 			return false;
 		}
 	}
@@ -164,7 +161,7 @@ bool Items::allPositive() {
 
 bool Items::allNegative() {
 	for each (Item^ item in items) {
-		if (item->GetAttribute("CLASS")->Equals("1")) {
+		if (valueIsPositive(item->GetAttribute("CLASS"))) {
 			return false;
 		}
 	}
@@ -175,10 +172,10 @@ String^ Items::mostCommonClassification() {
 	int zeroes = 0;
 	int ones = 0;
 	for each (Item^ item in items) {
-		if (item->GetAttribute("CLASS")->Equals("0")) {
-			zeroes++;
-		} else {
+		if (valueIsPositive(item->GetAttribute("CLASS"))) {
 			ones++;
+		} else {
+			zeroes++;
 		}
 	}
 
@@ -194,9 +191,13 @@ int Items::Count() {
 }
 
 String^ Items::ToString() {
-	String^ result = "[";
+	String^ result = "{";
 	for each (Item^ item in items) {
-		result += item->ToString() + ",";
+		result += item->ToString() + "\n";
 	}
-	return result->Trim(',') + "]";
+	return result->Trim(',') + "}";
+}
+
+bool Items::valueIsPositive(String^ value) {
+	return value->Equals("1") || value->ToLower()->Equals("true");
 }
