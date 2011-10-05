@@ -11,5 +11,7 @@ public:
 	Item(Dictionary<String^, String^>^ attributes);
 	String^ GetAttribute(String^ attribute);
 	virtual String^ ToString() override;
+	bool isPositive();
+	static bool valueIsPositive(String^ value);
 };
 

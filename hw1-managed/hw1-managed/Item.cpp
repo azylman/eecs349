@@ -15,3 +15,11 @@ String^ Item::ToString() {
 	}
 	return string->Trim() + "]";
 }
+
+bool Item::isPositive() {
+	return valueIsPositive(attributes["CLASS"]);
+}
+
+bool Item::valueIsPositive(String^ value) {
+	return value->Equals("1") || value->ToLower()->Equals("true");
+}

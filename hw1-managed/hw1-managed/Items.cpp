@@ -25,7 +25,7 @@ double Items::calculateEntropyGainFromAttribute(String^ attribute) {
 	Dictionary<String^, int>^ totalItemsByAttribute = gcnew Dictionary<String^, int>();
 
 	for each (Item^ item in items) {
-		if (valueIsPositive(item->GetAttribute("CLASS"))) {
+		if (item->isPositive()) {
 			originalGood++;
 
 			addOrIncrementKey(goodCountsByAttribute, item->GetAttribute(attribute));
@@ -152,7 +152,7 @@ Items^ Items::filterListByDecisions(Dictionary<String^, String^>^ decisions) {
 
 bool Items::allPositive() {
 	for each (Item^ item in items) {
-		if (!valueIsPositive(item->GetAttribute("CLASS"))) {
+		if (!item->isPositive()) {
 			return false;
 		}
 	}
@@ -161,7 +161,7 @@ bool Items::allPositive() {
 
 bool Items::allNegative() {
 	for each (Item^ item in items) {
-		if (valueIsPositive(item->GetAttribute("CLASS"))) {
+		if (item->isPositive()) {
 			return false;
 		}
 	}
@@ -172,7 +172,7 @@ String^ Items::mostCommonClassification() {
 	int zeroes = 0;
 	int ones = 0;
 	for each (Item^ item in items) {
-		if (valueIsPositive(item->GetAttribute("CLASS"))) {
+		if (item->isPositive()) {
 			ones++;
 		} else {
 			zeroes++;
@@ -198,6 +198,6 @@ String^ Items::ToString() {
 	return result->Trim(',') + "}";
 }
 
-bool Items::valueIsPositive(String^ value) {
-	return value->Equals("1") || value->ToLower()->Equals("true");
+List<Item^>^ Items::getItems() {
+	return items;
 }

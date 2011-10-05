@@ -63,22 +63,44 @@ int main(array<String^> ^args)
 	}
 	items->setAttributes(gcnew Dictionary<String^, List<String^>^>(possibleAttributes));
 	
+	trainingSetSize = trainingSetSize > items->Count() ? items->Count() : trainingSetSize;
+
 	// We don't want this in our attributes to classify in the decision tree.
 	possibleAttributes->Remove("CLASS");
 	List<DecisionTree^>^ decisionTrees = gcnew List<DecisionTree^>();
+	Items^ trainingSet;
+	Items^ testingSet;
 	for (int i = 0; i < numberOfTrials; ++i) {
-		Items^ trainingSet = items->getTrainingSet(trainingSetSize);
-		Items^ testingSet = items->getTestingSet(trainingSet);
+		trainingSet = items->getTrainingSet(trainingSetSize);
+		testingSet = items->getTestingSet(trainingSet);
 		decisionTrees->Add(gcnew DecisionTree(trainingSet, testingSet, gcnew Dictionary<String^, List<String^>^>(possibleAttributes)));
 	}
 
+	double treePassing = 0;
+	double priorPassing = 0;
 	int numTrees = 1;
 	for each (DecisionTree^ tree in decisionTrees) {
+		
 		Console::WriteLine("");
-		Console::WriteLine("Trial " + numTrees++);
+		Console::WriteLine("Trial #" + numTrees++);
 		Console::WriteLine("----------------------------");
-		tree->print();
-	}
 
+		tree->print();
+
+		Console::WriteLine("");
+
+		double trialTreePassing = tree->classifyTestSet();
+		Console::WriteLine("% correct from tree: " + trialTreePassing);
+		treePassing += trialTreePassing;
+
+		double trialPriorPassing = tree->priorClassifyTestSet();
+		Console::WriteLine("% correct from prior probability: " + trialPriorPassing);
+		priorPassing += trialPriorPassing;
+	}
+	Console::WriteLine("\n\n");
+	Console::WriteLine("Using dataset " + inputFileName + " with " + numberOfTrials + " trials");
+	Console::WriteLine("Test set size: " + testingSet->Count() + ", training set size: " + trainingSet->Count());
+	Console::WriteLine("Average correct classification of decision tree: " + treePassing / (double) numberOfTrials);
+	Console::WriteLine("Average correct classification of prior probability: " + priorPassing / (double) numberOfTrials);
     return 0;
 }

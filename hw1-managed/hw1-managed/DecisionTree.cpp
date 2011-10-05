@@ -26,6 +26,16 @@ void DecisionTree::build(Items^ trainingSet, Dictionary<String^, List<String^>^>
 
 DecisionTree::DecisionTree(Items^ trainingSet, Items^ testingSet, Dictionary<String^, List<String^>^>^ attributes) : trainingSet(trainingSet), testingSet(testingSet) {
 	initValues();
+	int good = 0;
+	int bad = 0;
+	for each (Item^ item in trainingSet->getItems()) {
+		if (item->isPositive()) {
+			good++;
+		} else {
+			bad++;
+		}
+	}
+	priorProbability = (double) good / (double) (good + bad);
 	build(trainingSet, attributes);
 }
 
@@ -56,4 +66,57 @@ void DecisionTree::print(int depth) {
 	if (children->Count == 0) {
 		Console::WriteLine(indent + decisionAttribute + label);
 	}
+}
+
+bool DecisionTree::classify(Item^ item) {
+	if (children->Count > 0) {
+		String^ attribute = item->GetAttribute(decisionAttribute);
+		return children[attribute]->classify(item);
+	} else {
+		return Item::valueIsPositive(label) == item->isPositive();
+	}
+}
+
+double DecisionTree::classify(Items^ dataset) {
+	int correct = 0;
+	int incorrect = 0;
+
+	for each (Item^ item in dataset->getItems()) {
+		if (classify(item)) {
+			correct++;
+		} else {
+			incorrect++;
+		}
+	}
+
+	return (double) correct / (double) (correct + incorrect);
+}
+
+double DecisionTree::classifyTestSet() {
+	if (testingSet->Count() > 0) {
+		return classify(testingSet);
+	} else {
+		return -1;
+	}
+}
+
+double DecisionTree::priorClassify(Items^ dataset) {
+	int correct = 0;
+	int incorrect = 0;
+
+	Random^ rnd = gcnew Random();
+	for each (Item^ item in dataset->getItems()) {
+		double num = rnd->NextDouble();
+		bool classifiedAsPositive = priorProbability > num;
+		if (classifiedAsPositive == item->isPositive()) {
+			correct++;
+		} else {
+			incorrect++;
+		}
+	}
+
+	return (double) correct / (double) (correct + incorrect);
+}
+double DecisionTree::priorClassifyTestSet() {
+	return priorClassify(testingSet);
 }

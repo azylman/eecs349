@@ -13,7 +13,6 @@ private:
 	HashSet<int>^ getNRandomNumbersFromAToB(int n, int a, int b);
 	generic<typename T>
 	List<T>^ setSubtract(List<T>^ one, List<T>^ two);
-	bool valueIsPositive(String^ value);
 public:
 	Items();
 	void Add(Item^ item);
@@ -28,5 +27,6 @@ public:
 	Items^ filterListByDecisions(Dictionary<String^, String^>^ decisions);
 	int Count();
 	virtual String^ ToString() override;
+	List<Item^>^ getItems();
 };
 

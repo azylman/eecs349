@@ -15,10 +15,16 @@ private:
 	void print(int depth);
 	void build(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
 	void initValues();
+	bool classify(Item^ item);
+	double priorProbability;
 
 public:
 	DecisionTree(Items^ trainingSet, Items^ testingSet, Dictionary<String^, List<String^>^>^ attributes);
 	DecisionTree(Items^ trainingSet, Dictionary<String^, List<String^>^>^ attributes);
 	void print();
+	double classify(Items^ dataset);
+	double classifyTestSet();
+	double priorClassify(Items^ dataset);
+	double priorClassifyTestSet();
 };
 
