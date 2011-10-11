@@ -13,3 +13,11 @@ Dict::Dict(String^ dictPath) {
 		dict->Add(item);
 	}
 }
+
+String^ Dict::getCorrectWord(String^ word) {
+	if (dict->Contains(word)) {
+		return word;
+	}
+
+	// Find the word with the smallest Levenshtein Distance
+}

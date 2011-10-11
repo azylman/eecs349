@@ -8,5 +8,6 @@ public ref class Dict
 	HashSet<String^>^ dict;
 public:
 	Dict(String^ dictPath);
+	String^ getCorrectWord(String^ word);
 };
 
