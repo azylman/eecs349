@@ -8,6 +8,8 @@ public ref class Dict
 private:
 	HashSet<String^>^ dict;
 	Dictionary<String^, Dictionary<String^, int>^>^ costs;
+	Dictionary<String^, String^>^ correctWords;
+
 	void addCost(String^ word1, String^ word2, int cost);
 	int getCost(String^ word1, String^ word2);
 public:

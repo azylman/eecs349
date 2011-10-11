@@ -6,6 +6,7 @@ using namespace System::IO;
 Dict::Dict(String^ dictPath) {
 	dict = gcnew HashSet<String^>();
 	costs = gcnew Dictionary<String^, Dictionary<String^, int>^>();
+	correctWords = gcnew Dictionary<String^, String^>();
 
 	// Read in the dictionary
 	StreamReader^ dictFile = gcnew StreamReader(dictPath);
@@ -18,6 +19,10 @@ Dict::Dict(String^ dictPath) {
 String^ Dict::getCorrectWord(String^ word) {
 	if (dict->Contains(word)) {
 		return word;
+	}
+
+	if (correctWords->ContainsKey(word)) {
+		return correctWords[word];
 	}
 
 	// Find the word with the smallest Levenshtein Distance
