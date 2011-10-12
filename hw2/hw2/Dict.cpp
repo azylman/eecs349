@@ -25,12 +25,15 @@ String^ Dict::getCorrectWord(String^ word) {
 		return correctWords[word];
 	}
 
-	// Find the word with the smallest Levenshtein Distance
+	// Initialize this to the largest possible distance
 	int shortestDistance = int::MaxValue;
 	String^ bestWord = "";
 	for each (String^ alternateWord in dict) {
 		int cost = getCost(word, alternateWord);
 
+		// 0 is the placeholder for "not found". It will never be an actual result
+		// because a distance of 0 would signify that our word was in the dictionary,
+		// and we're checking that above with dict->Contains
 		if (cost == 0) {
 			cost = calculateLevenshteinDistance(word, alternateWord);
 			addCost(word, alternateWord, cost);
@@ -66,14 +69,14 @@ int Dict::calculateLevenshteinDistance(String^ s, String^ t) {
 	int substitutionCost = 1;
 
 	for (int i = 0; i < m; ++i) {
-		d->Put(i, 0, i); // the distance of any first string to an empty second string
+		d->Put(i, -1, i); // the distance of any first string to an empty second string
 	}
 	for (int i = 0; i < n; ++i) {
-		d->Put(0, i, i); // the distance of any second string to an empty first string
+		d->Put(-1, i, i); // the distance of any second string to an empty first string
 	}
 
-	for (int j = 1; j < n; ++j) {
-		for (int i = 1; i < m; ++i) {
+	for (int j = 0; j < n; ++j) {
+		for (int i = 0; i < m; ++i) {
 			if (s[i] == t[j]) {
 				int cost = d->Get(i - 1, j - 1);
 				d->Put(i, j, cost); // no operation cost, because they match
@@ -88,5 +91,5 @@ int Dict::calculateLevenshteinDistance(String^ s, String^ t) {
 		}
 	}
 
-	return d->Get(m-1, n-1);
+	return d->Get(m - 1, n - 1);
 }
