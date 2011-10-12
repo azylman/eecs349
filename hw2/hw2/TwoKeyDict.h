@@ -1,5 +1,6 @@
 #pragma once
 
+using namespace System;
 using namespace System::Collections::Generic;
 
 // Visual C++ doesn't support multi-dimensional arrays
@@ -19,6 +20,7 @@ public:
 			}
 		}
 
+		//Console::WriteLine("Getting value of " + key1 + " & " + key2 + ": " + V());
 		return V();
 	}
 	void Put(K key1, K key2, V value) {

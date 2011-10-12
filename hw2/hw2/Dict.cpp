@@ -26,7 +26,23 @@ String^ Dict::getCorrectWord(String^ word) {
 	}
 
 	// Find the word with the smallest Levenshtein Distance
-	return "";
+	int shortestDistance = int::MaxValue;
+	String^ bestWord = "";
+	for each (String^ alternateWord in dict) {
+		int cost = getCost(word, alternateWord);
+
+		if (cost == 0) {
+			cost = calculateLevenshteinDistance(word, alternateWord);
+			addCost(word, alternateWord, cost);
+		}
+
+		if (cost < shortestDistance) {
+			bestWord = alternateWord;
+			shortestDistance = cost;
+		}
+	}
+
+	return bestWord;
 }
 
 // These are both currently wrong. We're using a TwoKeyDict, which assumes that the order of the keys matters.
@@ -44,7 +60,7 @@ int Dict::calculateLevenshteinDistance(String^ s, String^ t) {
 	int m = s->Length;
 	int n = t->Length;
 
-	TwoKeyDict<int, int>^ d = gcnew TwoKeyDict<int, int>();
+	TwoKeyDict<Int32, Int32>^ d = gcnew TwoKeyDict<Int32, Int32>();
 	int deletionCost = 1;
 	int insertionCost = 1;
 	int substitutionCost = 1;
@@ -59,19 +75,18 @@ int Dict::calculateLevenshteinDistance(String^ s, String^ t) {
 	for (int j = 1; j < n; ++j) {
 		for (int i = 1; i < m; ++i) {
 			if (s[i] == t[j]) {
-				d->Put(i, j, d->Get(i - 1, j - 1)); // no operation cost, because they match
+				int cost = d->Get(i - 1, j - 1);
+				d->Put(i, j, cost); // no operation cost, because they match
 			} else {
-				d->Put(
-					i,
-					j,
-					Math::Min(
-						Math::Min(
-							d->Get(i - 1, j) + deletionCost,
-							d->Get(i, j - 1) + insertionCost),
-							d->Get(i - 1, j - 1) + substitutionCost));
+				int cost = Math::Min(
+								Math::Min(
+									d->Get(i - 1, j) + deletionCost,
+									d->Get(i, j - 1) + insertionCost),
+								d->Get(i - 1, j - 1) + substitutionCost);
+				d->Put(i, j, cost);
 			}
 		}
 	}
 
-	return d->Get(m, n);
+	return d->Get(m-1, n-1);
 }
