@@ -5,7 +5,7 @@ using namespace System::IO;
 
 Dict::Dict(String^ dictPath) {
 	dict = gcnew HashSet<String^>();
-	costs = gcnew TwoKeyDict<String^, int>();
+	costs = gcnew UnorderedTwoKeyDict<String^, int>();
 	correctWords = gcnew Dictionary<String^, String^>();
 
 	// Read in the dictionary

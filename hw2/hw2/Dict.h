@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TwoKeyDict.h"
+#include "UnorderedTwoKeyDict.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -9,7 +9,7 @@ public ref class Dict
 {
 private:
 	HashSet<String^>^ dict;
-	TwoKeyDict<String^, int>^ costs;
+	UnorderedTwoKeyDict<String^, int>^ costs;
 	Dictionary<String^, String^>^ correctWords;
 
 	void addCost(String^ word1, String^ word2, int cost);
