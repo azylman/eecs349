@@ -15,6 +15,8 @@ int main(array<System::String ^> ^args)
 
 	Console::WriteLine(dict->getCorrectWord("ablyl"));
 
+	Console::WriteLine(dict->getCorrectWord("ablyl"));
+
     Console::WriteLine(L"Hello World");
     return 0;
 }
