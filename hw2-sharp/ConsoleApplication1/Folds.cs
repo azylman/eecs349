@@ -8,9 +8,14 @@ namespace ConsoleApplication1
     class Folds
     {
         SortedDictionary<String, String> typos;
+        List<Dictionary<String, String>> trainingSets;
+        List<Dictionary<String, String>> testingSets;
+
         public Folds(Dictionary<String, String> typos)
         {
             this.typos = new SortedDictionary<String, String>(typos);
+            trainingSets = null;
+            testingSets = null;
         }
 
         public void makeN(int numFolds)
@@ -39,6 +44,19 @@ namespace ConsoleApplication1
 
                 trainingSets.Add(trainingSet);
                 testingSets.Add(trainingSet);
+
+                this.trainingSets = trainingSets;
+                this.testingSets = testingSets;
+            }
+
+            writeFoldsToDisk();
+        }
+
+        private void writeFoldsToDisk()
+        {
+            if (trainingSets == null || testingSets == null)
+            {
+                return;
             }
 
             // Write folds to disk
