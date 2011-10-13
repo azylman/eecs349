@@ -27,23 +27,11 @@ namespace ConsoleApplication1
 		        testingData.Add(parts[0], parts[1]);
 	        }
 
-            int success = 0;
-            int total = 0;
             Stopwatch timer = Stopwatch.StartNew();
-	        foreach (KeyValuePair<String, String> testData in testingData) {
-		        String result = dict.getCorrectWord(testData.Key);
-		        //Console.Write(testData.Key + " took " + time + " milliseconds to evaluate to " + result + " ");
-		        if (result == testData.Value) {
-			        //Console.WriteLine("which is CORRECT!");
-                    success++;
-		        } else {
-			        //Console.WriteLine("but it should be " + testData.Value);
-		        }
-                total++;
-	        }
+            double error = dict.measureError(testingData);
             long time = timer.ElapsedMilliseconds;
 
-            Console.WriteLine((double) success/(double) total + " success rate in " + time + " milliseconds.");
+            Console.WriteLine(error + " error rate in " + time + " milliseconds.");
         }
     }
 }

@@ -84,5 +84,27 @@ namespace ConsoleApplication1
             correctWords.Add(word, bestWord);
 	        return bestWord;
         }
+        public double measureError(Dictionary<String, String> typos)
+        {
+            int failure = 0;
+            int total = 0;
+            foreach (KeyValuePair<String, String> typo in typos)
+            {
+                String result = getCorrectWord(typo.Key);
+                //Console.Write(testData.Key + " took " + time + " milliseconds to evaluate to " + result + " ");
+                if (result == typo.Value)
+                {
+                    //Console.WriteLine("which is CORRECT!");
+                }
+                else
+                {
+                    failure++;
+                    //Console.WriteLine("but it should be " + testData.Value);
+                }
+                total++;
+            }
+
+            return (double)failure / (double)total;
+        }
     }
 }
