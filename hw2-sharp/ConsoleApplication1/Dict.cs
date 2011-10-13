@@ -73,14 +73,7 @@ namespace ConsoleApplication1
 	        int shortestDistance = int.MaxValue;
 	        String bestWord = "";
 	        foreach (String alternateWord in dict) {
-		        //int cost = getCost(word, alternateWord);
-                int cost = 0;
-		        // 0 is the placeholder for "not found". It will never be an actual result
-		        // because a distance of 0 would signify that our word was in the dictionary,
-		        // and we're checking that above with dict.Contains
-		        if (cost == 0) {
-			        cost = calculateLevenshteinDistance(word, alternateWord);
-		        }
+                int cost = calculateLevenshteinDistance(word, alternateWord);
 
 		        if (cost < shortestDistance) {
 			        bestWord = alternateWord;
