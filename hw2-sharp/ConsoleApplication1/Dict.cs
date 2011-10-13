@@ -59,6 +59,7 @@ namespace ConsoleApplication1
 		        dict.Add(item);
 	        }
         }
+
         public String getCorrectWord(String word)
         {
 	        if (dict.Contains(word)) {
@@ -84,6 +85,7 @@ namespace ConsoleApplication1
             correctWords.Add(word, bestWord);
 	        return bestWord;
         }
+
         public double measureError(Dictionary<String, String> typos)
         {
             int failure = 0;
