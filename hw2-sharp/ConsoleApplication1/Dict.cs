@@ -11,10 +11,9 @@ namespace ConsoleApplication1
 	    private ISet<String> fullDict;
         private ISet<String> reducedDict;
 	    private IDictionary<String, String> correctWords;
-        bool useReducedDataSet;
-        double hillClimbedDeletionCost;
-        double hillClimbedInsertionCost;
-        double hillClimbedSubstitutionCost;
+        double deletionCost;
+        double insertionCost;
+        double substitutionCost;
 
         private double calculateLevenshteinDistance(String s, String t, bool simplifiedCosts)
         {
@@ -22,22 +21,6 @@ namespace ConsoleApplication1
 	        int n = t.Length;
 
             double[,] d = new double[m + 1, n + 1];
-
-            double deletionCost;
-            double insertionCost;
-            double substitutionCost;
-            if (simplifiedCosts)
-            {
-                deletionCost = 1;
-                insertionCost = 1;
-                substitutionCost = 1;
-            }
-            else
-            {
-                deletionCost = hillClimbedDeletionCost;
-                insertionCost = hillClimbedInsertionCost;
-                substitutionCost = hillClimbedSubstitutionCost;
-            }
 
 	        for (int i = 0; i < m; ++i) {
                 d[i, 0] = i;
@@ -70,9 +53,7 @@ namespace ConsoleApplication1
             fullDict = new HashSet<String>();
             reducedDict = new HashSet<String>();
 	        correctWords = new Dictionary<String, String>();
-            hillClimbedDeletionCost = 1;
-            hillClimbedInsertionCost = 1;
-            hillClimbedSubstitutionCost = 1;
+            resetCosts();
 
 	        StreamReader dictFile = new StreamReader(dictPath);
 
@@ -136,10 +117,16 @@ namespace ConsoleApplication1
             return (double)failure / (double)total;
         }
 
-        // Hill climbing measureError
-        public double measureError2(IDictionary<String, String> typos, bool useReducedDataSet)
+        public void resetCosts()
         {
-            return 0.0;
+            deletionCost = 1;
+            insertionCost = 1;
+            substitutionCost = 1;
+        }
+
+        public void hillClimber(IDictionary<String, String> typos, bool useReducedDataSet)
+        {
+            resetCosts();
         }
     }
 }
