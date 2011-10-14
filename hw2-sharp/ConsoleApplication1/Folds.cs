@@ -32,7 +32,7 @@ namespace ConsoleApplication1
         {
             int foldSize = typos.Count/numFolds;
 
-            for (int i = 0; i < foldSize; i++)
+            for (int i = 0; i < numFolds; i++)
             {
                 IDictionary<String, String> trainingSet = new Dictionary<String, String>();
                 IDictionary<String, String> testingSet = new Dictionary<String, String>();
@@ -40,7 +40,7 @@ namespace ConsoleApplication1
                 int keyCount = 0;
                 foreach (KeyValuePair<String, String> typo in typos)
                 {
-                    if (keyCount > foldSize * i && keyCount < (foldSize + 1) * i)
+                    if (keyCount >= foldSize * i && keyCount <= foldSize * (i + 1))
                     {
                         trainingSet.Add(typo.Key, typo.Value);
                     }
@@ -59,9 +59,22 @@ namespace ConsoleApplication1
 
         private void writeFoldsToDisk()
         {
+            int foldCount = 0;
             foreach (Fold fold in folds)
             {
-                
+                foldCount++;
+                StreamWriter trainWriter = new StreamWriter(name + foldCount + "train.txt");
+                StreamWriter testWriter = new StreamWriter(name + foldCount + "test.txt");
+
+                foreach (KeyValuePair<String, String> trainingData in fold.trainingSet)
+                {
+                    trainWriter.WriteLine(trainingData.Key + "\t" + trainingData.Value);
+                }
+
+                foreach (KeyValuePair<String, String> testingData in fold.testingSet)
+                {
+                    testWriter.WriteLine(testingData.Key + "\t" + testingData.Value);
+                }
             }
         }
     }
