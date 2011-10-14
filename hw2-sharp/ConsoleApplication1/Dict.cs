@@ -8,8 +8,8 @@ namespace ConsoleApplication1
 {
     class Dict
     {
-	    private HashSet<String> dict;
-	    private Dictionary<String, String> correctWords;
+	    private ISet<String> dict;
+	    private IDictionary<String, String> correctWords;
 
         private int calculateLevenshteinDistance(String s, String t)
         {
@@ -86,7 +86,7 @@ namespace ConsoleApplication1
 	        return bestWord;
         }
 
-        public double measureError(Dictionary<String, String> typos)
+        public double measureError(IDictionary<String, String> typos)
         {
             int failure = 0;
             int total = 0;

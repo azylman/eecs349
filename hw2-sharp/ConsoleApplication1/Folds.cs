@@ -2,33 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace ConsoleApplication1
 {
     class Folds
     {
-        SortedDictionary<String, String> typos;
-        List<Dictionary<String, String>> trainingSets;
-        List<Dictionary<String, String>> testingSets;
+        public IDictionary<String, String> typos;
+        public IList<Fold> folds;
 
-        public Folds(Dictionary<String, String> typos)
+        public Folds(String input)
         {
-            this.typos = new SortedDictionary<String, String>(typos);
-            trainingSets = null;
-            testingSets = null;
+            typos = new SortedDictionary<String, String>();
+            folds = new List<Fold>();
+            StreamReader testingDataFile = new StreamReader(input);
+
+            String data;
+            while ((data = testingDataFile.ReadLine()) != null)
+            {
+                List<String> parts = new List<String>(data.Split('\t'));
+                typos.Add(parts[0], parts[1]);
+            }
         }
 
         public void makeN(int numFolds)
         {
             int foldSize = typos.Count/numFolds;
-            List<Dictionary<String, String>> trainingSets = new List<Dictionary<String, String>>();
-            List<Dictionary<String, String>> testingSets = new List<Dictionary<String, String>>();
+
             for (int i = 0; i < foldSize; i++)
             {
-                int keyCount = 0;
-                Dictionary<String, String> trainingSet = new Dictionary<String, String>();
-                Dictionary<String, String> testingSet = new Dictionary<String, String>();
+                IDictionary<String, String> trainingSet = new Dictionary<String, String>();
+                IDictionary<String, String> testingSet = new Dictionary<String, String>();
 
+                int keyCount = 0;
                 foreach (KeyValuePair<String, String> typo in typos)
                 {
                     if (keyCount > foldSize * i && keyCount < (foldSize + 1) * i)
@@ -42,11 +48,7 @@ namespace ConsoleApplication1
                     keyCount++;
                 }
 
-                trainingSets.Add(trainingSet);
-                testingSets.Add(trainingSet);
-
-                this.trainingSets = trainingSets;
-                this.testingSets = testingSets;
+                folds.Add(new Fold(trainingSet, testingSet));
             }
 
             writeFoldsToDisk();
@@ -54,12 +56,10 @@ namespace ConsoleApplication1
 
         private void writeFoldsToDisk()
         {
-            if (trainingSets == null || testingSets == null)
+            foreach (Fold fold in folds)
             {
-                return;
+                
             }
-
-            // Write folds to disk
         }
     }
 }

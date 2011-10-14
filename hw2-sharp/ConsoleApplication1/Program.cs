@@ -17,18 +17,10 @@ namespace ConsoleApplication1
 	        String testingPath = path + "wikipediatypoclean.txt";
 
 	        Dict dict = new Dict(dictPath);
-	        Dictionary<String, String> testingData = new Dictionary<String, String>();
-
-	        StreamReader testingDataFile = new StreamReader(testingPath);
-
-            String data;
-	        while ((data = testingDataFile.ReadLine()) != null) {
-		        List<String> parts = new List<String>(data.Split('\t'));
-		        testingData.Add(parts[0], parts[1]);
-	        }
+            Folds folds = new Folds(testingPath);
 
             Stopwatch timer = Stopwatch.StartNew();
-            double error = dict.measureError(testingData);
+            double error = dict.measureError(folds.typos);
             long time = timer.ElapsedMilliseconds;
 
             Console.WriteLine(error + " error rate in " + time + " milliseconds.");
