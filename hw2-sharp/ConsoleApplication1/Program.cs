@@ -20,7 +20,7 @@ namespace ConsoleApplication1
             Folds folds = new Folds(testingPath);
 
             Stopwatch timer = Stopwatch.StartNew();
-            double error = dict.measureError(folds.typos);
+            double error = dict.measureError(folds.typos, true);
             long time = timer.ElapsedMilliseconds;
 
             Console.WriteLine(error + " error rate in " + time + " milliseconds.");

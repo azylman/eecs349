@@ -8,8 +8,10 @@ namespace ConsoleApplication1
 {
     class Dict
     {
-	    private ISet<String> dict;
+	    private ISet<String> fullDict;
+        private ISet<String> reducedDict;
 	    private IDictionary<String, String> correctWords;
+        bool useReducedDataSet;
 
         private int calculateLevenshteinDistance(String s, String t)
         {
@@ -49,20 +51,28 @@ namespace ConsoleApplication1
 
         public Dict(String dictPath)
         {
-            dict = new HashSet<String>();
+            fullDict = new HashSet<String>();
+            reducedDict = new HashSet<String>();
 	        correctWords = new Dictionary<String, String>();
 
 	        StreamReader dictFile = new StreamReader(dictPath);
 
             String item;
 	        while ((item = dictFile.ReadLine()) != null) {
-		        dict.Add(item);
+                fullDict.Add(item);
+                if (item[0] == 'a')
+                {
+                    reducedDict.Add(item);
+                }
 	        }
         }
 
-        public String getCorrectWord(String word)
+        public String getCorrectWord(String word, bool useReducedDataSet)
         {
-	        if (dict.Contains(word)) {
+            ISet<String> dict = useReducedDataSet ? reducedDict : fullDict;
+
+            if (dict.Contains(word))
+            {
 		        return word;
 	        }
 
@@ -73,7 +83,8 @@ namespace ConsoleApplication1
 	        // Initialize this to the largest possible distance
 	        int shortestDistance = int.MaxValue;
 	        String bestWord = "";
-	        foreach (String alternateWord in dict) {
+            foreach (String alternateWord in dict)
+            {
                 int cost = calculateLevenshteinDistance(word, alternateWord);
 
 		        if (cost < shortestDistance) {
@@ -86,24 +97,21 @@ namespace ConsoleApplication1
 	        return bestWord;
         }
 
-        public double measureError(IDictionary<String, String> typos)
+        public double measureError(IDictionary<String, String> typos, bool useReducedDataSet)
         {
             int failure = 0;
             int total = 0;
             foreach (KeyValuePair<String, String> typo in typos)
             {
-                String result = getCorrectWord(typo.Key);
-                //Console.Write(testData.Key + " took " + time + " milliseconds to evaluate to " + result + " ");
-                if (result == typo.Value)
+                if (!useReducedDataSet || typo.Key[0] == 'a')
                 {
-                    //Console.WriteLine("which is CORRECT!");
+                    String result = getCorrectWord(typo.Key, useReducedDataSet);
+                    if (result != typo.Value)
+                    {
+                        failure++;
+                    }
+                    total++;
                 }
-                else
-                {
-                    failure++;
-                    //Console.WriteLine("but it should be " + testData.Value);
-                }
-                total++;
             }
 
             return (double)failure / (double)total;
