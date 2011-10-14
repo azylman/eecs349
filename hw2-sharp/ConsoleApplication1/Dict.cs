@@ -12,16 +12,32 @@ namespace ConsoleApplication1
         private ISet<String> reducedDict;
 	    private IDictionary<String, String> correctWords;
         bool useReducedDataSet;
+        double hillClimbedDeletionCost;
+        double hillClimbedInsertionCost;
+        double hillClimbedSubstitutionCost;
 
-        private int calculateLevenshteinDistance(String s, String t)
+        private double calculateLevenshteinDistance(String s, String t, bool simplifiedCosts)
         {
             int m = s.Length;
 	        int n = t.Length;
 
-            int[,] d = new int[m + 1, n + 1];
-	        int deletionCost = 1;
-	        int insertionCost = 1;
-	        int substitutionCost = 1;
+            double[,] d = new double[m + 1, n + 1];
+
+            double deletionCost;
+            double insertionCost;
+            double substitutionCost;
+            if (simplifiedCosts)
+            {
+                deletionCost = 1;
+                insertionCost = 1;
+                substitutionCost = 1;
+            }
+            else
+            {
+                deletionCost = hillClimbedDeletionCost;
+                insertionCost = hillClimbedInsertionCost;
+                substitutionCost = hillClimbedSubstitutionCost;
+            }
 
 	        for (int i = 0; i < m; ++i) {
                 d[i, 0] = i;
@@ -33,10 +49,10 @@ namespace ConsoleApplication1
 	        for (int j = 0; j < n; ++j) {
 		        for (int i = 0; i < m; ++i) {
 			        if (s[i] == t[j]) {
-                        int cost = d[i, j];
+                        double cost = d[i, j];
 				        d[i + 1, j + 1] = cost;
 			        } else {
-				        int cost = Math.Min(
+                        double cost = Math.Min(
 								        Math.Min(
                                             d[i, j + 1] + deletionCost,
 									        d[i + 1, j] + insertionCost),
@@ -54,6 +70,9 @@ namespace ConsoleApplication1
             fullDict = new HashSet<String>();
             reducedDict = new HashSet<String>();
 	        correctWords = new Dictionary<String, String>();
+            hillClimbedDeletionCost = 1;
+            hillClimbedInsertionCost = 1;
+            hillClimbedSubstitutionCost = 1;
 
 	        StreamReader dictFile = new StreamReader(dictPath);
 
@@ -67,7 +86,7 @@ namespace ConsoleApplication1
 	        }
         }
 
-        public String getCorrectWord(String word, bool useReducedDataSet)
+        public String getCorrectWord(String word, bool useReducedDataSet, bool simplifiedCosts)
         {
             ISet<String> dict = useReducedDataSet ? reducedDict : fullDict;
 
@@ -81,11 +100,11 @@ namespace ConsoleApplication1
 	        }
 
 	        // Initialize this to the largest possible distance
-	        int shortestDistance = int.MaxValue;
+            double shortestDistance = double.MaxValue;
 	        String bestWord = "";
             foreach (String alternateWord in dict)
             {
-                int cost = calculateLevenshteinDistance(word, alternateWord);
+                double cost = calculateLevenshteinDistance(word, alternateWord, simplifiedCosts);
 
 		        if (cost < shortestDistance) {
 			        bestWord = alternateWord;
@@ -105,7 +124,7 @@ namespace ConsoleApplication1
             {
                 if (!useReducedDataSet || typo.Key[0] == 'a')
                 {
-                    String result = getCorrectWord(typo.Key, useReducedDataSet);
+                    String result = getCorrectWord(typo.Key, useReducedDataSet, true);
                     if (result != typo.Value)
                     {
                         failure++;
@@ -115,6 +134,12 @@ namespace ConsoleApplication1
             }
 
             return (double)failure / (double)total;
+        }
+
+        // Hill climbing measureError
+        public double measureError2(IDictionary<String, String> typos, bool useReducedDataSet)
+        {
+            return 0.0;
         }
     }
 }
