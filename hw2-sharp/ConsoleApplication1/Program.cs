@@ -11,10 +11,14 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            String path = "";
+            if (args.Length != 3)
+            {
+                Console.WriteLine("Error: expects three inputs (<file to check>, <dictionary>, <output path>)");
+            }
+
 	        // Create our file paths
-            String dictPath = path + "3esl.txt";
-	        String testingPath = path + "wikipediatypoclean.txt";
+            String dictPath = args[1];
+            String testingPath = "wikipediatypoclean.txt";
 
 	        Dict dict = new Dict(dictPath);
             Folds folds = new Folds(testingPath);
