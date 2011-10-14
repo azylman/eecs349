@@ -10,11 +10,14 @@ namespace ConsoleApplication1
     {
         public IDictionary<String, String> typos;
         public IList<Fold> folds;
+        private String name;
 
         public Folds(String input)
         {
             typos = new SortedDictionary<String, String>();
             folds = new List<Fold>();
+            name = Path.GetFileNameWithoutExtension(input);
+
             StreamReader testingDataFile = new StreamReader(input);
 
             String data;
