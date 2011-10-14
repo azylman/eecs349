@@ -20,10 +20,14 @@ namespace ConsoleApplication1
             Folds folds = new Folds(testingPath);
 
             Stopwatch timer = Stopwatch.StartNew();
-            double error = dict.measureError(folds.typos, true);
-            long time = timer.ElapsedMilliseconds;
+            dict.hillClimber(folds.typos, true);
+            long climbTime = timer.ElapsedMilliseconds;
 
-            Console.WriteLine(error + " error rate in " + time + " milliseconds.");
+            timer = Stopwatch.StartNew();
+            double error = dict.measureError(folds.typos, true);
+            long measureTime = timer.ElapsedMilliseconds;
+
+            Console.WriteLine(error + " error rate in " + climbTime + measureTime + " ms (" + climbTime + " ms for climbing, " + measureTime + " ms for measuring.");
         }
     }
 }
