@@ -14,41 +14,49 @@ namespace ConsoleApplication1
         double insertionCost;
         double substitutionCost;
 
-        private double calculateLevenshteinDistance(String s, String t, bool verbose)
+        private double calculateLevenshteinDistance(String s, String t, bool verbose, double deletionCost, double insertionCost, double substitutionCost)
         {
-            if (verbose)
-            {
-                Console.WriteLine("Deletion: " + deletionCost + ", insertion: " + insertionCost + ", substitution: " + substitutionCost);
-            }
             int m = s.Length;
-	        int n = t.Length;
+            int n = t.Length;
 
             double[,] d = new double[m + 1, n + 1];
 
-	        for (int i = 0; i < m; ++i) {
+            for (int i = 0; i < m; ++i)
+            {
                 d[i, 0] = i;
-	        }
-	        for (int i = 0; i < n; ++i) {
+            }
+            for (int i = 0; i < n; ++i)
+            {
                 d[0, i] = i;
-	        }
+            }
 
-	        for (int j = 0; j < n; ++j) {
-		        for (int i = 0; i < m; ++i) {
-			        if (s[i] == t[j]) {
+            for (int j = 0; j < n; ++j)
+            {
+                for (int i = 0; i < m; ++i)
+                {
+                    if (s[i] == t[j])
+                    {
                         double cost = d[i, j];
-				        d[i + 1, j + 1] = cost;
-			        } else {
-                        double cost = Math.Min(
-								        Math.Min(
-                                            d[i, j + 1] + deletionCost,
-									        d[i + 1, j] + insertionCost),
-								        d[i, j] + substitutionCost);
                         d[i + 1, j + 1] = cost;
-			        }
-		        }
-	        }
+                    }
+                    else
+                    {
+                        double cost = Math.Min(
+                                        Math.Min(
+                                            d[i, j + 1] + deletionCost,
+                                            d[i + 1, j] + insertionCost),
+                                        d[i, j] + substitutionCost);
+                        d[i + 1, j + 1] = cost;
+                    }
+                }
+            }
 
-	        return d[m - 1, n - 1];
+            return d[m - 1, n - 1];
+        }
+
+        private double calculateLevenshteinDistance(String s, String t, bool verbose)
+        {
+            return calculateLevenshteinDistance(s, t, verbose, deletionCost, insertionCost, substitutionCost);
         }
 
         public Dict(String dictPath)
