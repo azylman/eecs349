@@ -32,27 +32,7 @@ namespace ConsoleApplication1
         {
             int foldSize = typos.Count / numFolds;
 
-            for (int i = 0; i < numFolds; i++)
-            {
-                IDictionary<String, String> trainingSet = new Dictionary<String, String>();
-                IDictionary<String, String> testingSet = new Dictionary<String, String>();
-
-                int keyCount = 0;
-                foreach (KeyValuePair<String, String> typo in typos)
-                {
-                    if (keyCount >= foldSize * i && keyCount <= foldSize * (i + 1))
-                    {
-                        trainingSet.Add(typo.Key, typo.Value);
-                    }
-                    else
-                    {
-                        testingSet.Add(typo.Key, typo.Value);
-                    }
-                    keyCount++;
-                }
-
-                folds.Add(new Fold(trainingSet, testingSet));
-            }
+            createFolds(numFolds, foldSize);
 
             writeFoldsToDisk();
         }
@@ -61,6 +41,13 @@ namespace ConsoleApplication1
         {
             int numFolds = typos.Count / foldSize;
 
+            createFolds(numFolds, foldSize);
+
+            writeFoldsToDisk();
+        }
+
+        private void createFolds(int numFolds, int foldSize)
+        {
             for (int i = 0; i < numFolds; i++)
             {
                 IDictionary<String, String> trainingSet = new Dictionary<String, String>();
@@ -82,8 +69,6 @@ namespace ConsoleApplication1
 
                 folds.Add(new Fold(trainingSet, testingSet));
             }
-
-            writeFoldsToDisk();
         }
 
         private void writeFoldsToDisk()
