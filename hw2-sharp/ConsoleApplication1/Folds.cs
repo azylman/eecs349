@@ -30,7 +30,36 @@ namespace ConsoleApplication1
 
         public void makeN(int numFolds)
         {
-            int foldSize = typos.Count/numFolds;
+            int foldSize = typos.Count / numFolds;
+
+            for (int i = 0; i < numFolds; i++)
+            {
+                IDictionary<String, String> trainingSet = new Dictionary<String, String>();
+                IDictionary<String, String> testingSet = new Dictionary<String, String>();
+
+                int keyCount = 0;
+                foreach (KeyValuePair<String, String> typo in typos)
+                {
+                    if (keyCount >= foldSize * i && keyCount <= foldSize * (i + 1))
+                    {
+                        trainingSet.Add(typo.Key, typo.Value);
+                    }
+                    else
+                    {
+                        testingSet.Add(typo.Key, typo.Value);
+                    }
+                    keyCount++;
+                }
+
+                folds.Add(new Fold(trainingSet, testingSet));
+            }
+
+            writeFoldsToDisk();
+        }
+
+        public void makeWithSizeN(int foldSize)
+        {
+            int numFolds = typos.Count / foldSize;
 
             for (int i = 0; i < numFolds; i++)
             {
