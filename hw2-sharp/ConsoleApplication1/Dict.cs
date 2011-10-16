@@ -10,11 +10,9 @@ namespace ConsoleApplication1
     {
 	    private ISet<String> fullDict;
         private ISet<String> reducedDict;
-        double deletionCost;
-        double insertionCost;
-        double substitutionCost;
+        Costs costs;
 
-        private double calculateLevenshteinDistance(String s, String t, bool verbose, double deletionCost, double insertionCost, double substitutionCost)
+        private double calculateLevenshteinDistance(String s, String t, bool verbose, Costs costs)
         {
             int m = s.Length;
             int n = t.Length;
@@ -43,9 +41,9 @@ namespace ConsoleApplication1
                     {
                         double cost = Math.Min(
                                         Math.Min(
-                                            d[i, j + 1] + deletionCost,
-                                            d[i + 1, j] + insertionCost),
-                                        d[i, j] + substitutionCost);
+                                            d[i, j + 1] + costs.deletionCost,
+                                            d[i + 1, j] + costs.insertionCost),
+                                        d[i, j] + costs.substitutionCost);
                         d[i + 1, j + 1] = cost;
                     }
                 }
@@ -56,7 +54,7 @@ namespace ConsoleApplication1
 
         private double calculateLevenshteinDistance(String s, String t, bool verbose)
         {
-            return calculateLevenshteinDistance(s, t, verbose, deletionCost, insertionCost, substitutionCost);
+            return calculateLevenshteinDistance(s, t, verbose, costs);
         }
 
         public Dict(String dictPath)
@@ -79,10 +77,10 @@ namespace ConsoleApplication1
 
         public String getCorrectWord(String word, bool useReducedDataSet)
         {
-            return getCorrectWord(word, useReducedDataSet, false);
+            return getCorrectWord(word, costs, useReducedDataSet, false);
         }
 
-        private String getCorrectWord(String word, bool useReducedDataSet, bool verbose)
+        private String getCorrectWord(String word, Costs costs, bool useReducedDataSet, bool verbose)
         {
             ISet<String> dict = useReducedDataSet ? reducedDict : fullDict;
 
@@ -96,7 +94,7 @@ namespace ConsoleApplication1
             String bestWord = "";
             foreach (String alternateWord in dict)
             {
-                double cost = calculateLevenshteinDistance(word, alternateWord, verbose);
+                double cost = calculateLevenshteinDistance(word, alternateWord, verbose, costs);
 
                 if (cost < shortestDistance)
                 {
@@ -115,13 +113,18 @@ namespace ConsoleApplication1
 
         private double measureError(IDictionary<String, String> typos, bool useReducedDataSet, bool verbose)
         {
+            return measureError(costs, typos, useReducedDataSet, verbose);
+        }
+
+        private double measureError(Costs costs, IDictionary<String, String> typos, bool useReducedDataSet, bool verbose)
+        {
             int failure = 0;
             int total = 0;
             foreach (KeyValuePair<String, String> typo in typos)
             {
                 if (!useReducedDataSet || typo.Key[0] == 'a')
                 {
-                    String result = getCorrectWord(typo.Key, useReducedDataSet, verbose);
+                    String result = getCorrectWord(typo.Key, costs, useReducedDataSet, verbose);
                     if (result != typo.Value)
                     {
                         failure++;
@@ -135,9 +138,7 @@ namespace ConsoleApplication1
 
         public void resetCosts()
         {
-            deletionCost = 1.0;
-            insertionCost = 1.0;
-            substitutionCost = 1.0;
+            costs = new Costs(1.0, 1.0, 1.0);
         }
 
         public void hillClimber(IDictionary<String, String> typos, bool useReducedDataSet)
@@ -145,28 +146,36 @@ namespace ConsoleApplication1
             resetCosts();
 
             double delta = .1;
+            // The minimum step size we want to go to.
+            double minDelta = .001;
 
             double error = measureError(typos, useReducedDataSet);
-            while (delta > .0001)
+            while (delta > minDelta)
             {
-                decrementVariable(ref deletionCost, delta, ref error, typos, useReducedDataSet);
-                decrementVariable(ref insertionCost, delta, ref error, typos, useReducedDataSet);
-                decrementVariable(ref substitutionCost, delta, ref error, typos, useReducedDataSet);
-
-                delta /= 10.0;
+                Costs newCost = getBestChild(costs, delta, typos, useReducedDataSet);
+                if (newCost.Equals(costs))
+                {
+                    delta /= 10.0;
+                }
+                costs = newCost;
             }
         }
 
-        private void decrementVariable(ref double var, double delta, ref double error, IDictionary<String, String> typos, bool useReducedDataSet)
+        private Costs getBestChild(Costs parent, double delta, IDictionary<String, String> typos, bool useReducedDataSet)
         {
-            double newError = error;
-            do
+            double lowestError = measureError(typos, useReducedDataSet, false);
+            Costs bestCost = parent;
+            foreach (Costs child in parent.getChildren(delta))
             {
-                error = newError;
-                var -= delta;
-                newError = measureError(typos, useReducedDataSet, false);
-            } while (newError < error);
-            var += delta; // At this point, our variable is one delta lower than we want.
+                double newError = measureError(child, typos, useReducedDataSet, false);
+                if (newError < lowestError)
+                {
+                    lowestError = newError;
+                    bestCost = child;
+                }
+            }
+
+            return bestCost;
         }
     }
 }

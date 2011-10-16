@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Costs.cs" />
     <Compile Include="Dict.cs" />
     <Compile Include="Fold.cs" />
     <Compile Include="Folds.cs" />
