@@ -31,7 +31,7 @@ namespace ConsoleApplication1
             double error = dict.measureError(folds.typos, true);
             long measureTime = timer.ElapsedMilliseconds;
 
-            Console.WriteLine(error + " error rate in " + climbTime + measureTime + " ms (" + climbTime + " ms for climbing, " + measureTime + " ms for measuring.");
+            Console.WriteLine(error + " error rate in " + (climbTime + measureTime) + " ms (" + climbTime + " ms for climbing, " + measureTime + " ms for measuring.");
         }
     }
 }

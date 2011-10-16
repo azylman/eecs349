@@ -147,10 +147,10 @@ namespace ConsoleApplication1
 
             double delta = .1;
             // The minimum step size we want to go to.
-            double minDelta = .001;
+            double minDelta = .1;
 
             double error = measureError(typos, useReducedDataSet);
-            while (delta > minDelta)
+            while (delta >= minDelta)
             {
                 Costs newCost = getBestChild(costs, delta, typos, useReducedDataSet);
                 if (newCost.Equals(costs))

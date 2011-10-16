@@ -36,13 +36,14 @@ namespace ConsoleApplication1
         public List<Costs> getChildren(double delta)
         {
             List<Costs> children = new List<Costs>();
-            children.Add(new Costs(deletionCost - delta, insertionCost, substitutionCost));
-            children.Add(new Costs(deletionCost - delta, insertionCost - delta, substitutionCost));
-            children.Add(new Costs(deletionCost - delta, insertionCost - delta, substitutionCost - delta));
-            children.Add(new Costs(deletionCost - delta, insertionCost, substitutionCost - delta));
+            children.Add(new Costs(deletionCost, insertionCost, substitutionCost - delta));
             children.Add(new Costs(deletionCost, insertionCost - delta, substitutionCost));
             children.Add(new Costs(deletionCost, insertionCost - delta, substitutionCost - delta));
-            children.Add(new Costs(deletionCost, insertionCost, substitutionCost - delta));
+            children.Add(new Costs(deletionCost - delta, insertionCost, substitutionCost));
+            children.Add(new Costs(deletionCost - delta, insertionCost, substitutionCost - delta));
+            children.Add(new Costs(deletionCost - delta, insertionCost - delta, substitutionCost));
+            children.Add(new Costs(deletionCost - delta, insertionCost - delta, substitutionCost - delta));
+            
             return children;
         }
 
