@@ -13,7 +13,7 @@ namespace ConsoleApplication1
         private ISet<String> reducedDict;
         Costs costs;
 
-        private double calculateLevenshteinDistance(String s, String t, bool verbose, Costs costs)
+        private double levenshteinDistance(String s, String t, bool verbose, Costs costs)
         {
             int m = s.Length;
             int n = t.Length;
@@ -53,9 +53,9 @@ namespace ConsoleApplication1
             return d[m, n];
         }
 
-        private double calculateLevenshteinDistance(String s, String t, bool verbose)
+        private double levenshteinDistance(String s, String t, bool verbose)
         {
-            return calculateLevenshteinDistance(s, t, verbose, costs);
+            return levenshteinDistance(s, t, verbose, costs);
         }
 
         public Dict(String dictPath)
@@ -76,12 +76,12 @@ namespace ConsoleApplication1
 	        }
         }
 
-        public String getCorrectWord(String word, bool useReducedDataSet)
+        public String findClosestWord(String word, bool useReducedDataSet)
         {
-            return getCorrectWord(word, costs, useReducedDataSet, false);
+            return findClosestWord(word, costs, useReducedDataSet, false);
         }
 
-        private String getCorrectWord(String word, Costs costs, bool useReducedDataSet, bool verbose)
+        private String findClosestWord(String word, Costs costs, bool useReducedDataSet, bool verbose)
         {
             ISet<String> dict = useReducedDataSet ? reducedDict : fullDict;
 
@@ -96,7 +96,7 @@ namespace ConsoleApplication1
             foreach (String alternateWord in dict)
             {
                 
-                double cost = calculateLevenshteinDistance(word, alternateWord, verbose, costs);
+                double cost = levenshteinDistance(word, alternateWord, verbose, costs);
                 if (cost < shortestDistance)
                 {
                     bestWord = alternateWord;
@@ -125,7 +125,7 @@ namespace ConsoleApplication1
             {
                 if (!useReducedDataSet || typo.Key[0] == 'a')
                 {
-                    String result = getCorrectWord(typo.Key, costs, useReducedDataSet, verbose);
+                    String result = findClosestWord(typo.Key, costs, useReducedDataSet, verbose);
                     if (result != typo.Value)
                     {
                         failure++;
