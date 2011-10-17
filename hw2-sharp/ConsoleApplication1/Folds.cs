@@ -24,7 +24,11 @@ namespace ConsoleApplication1
             while ((data = testingDataFile.ReadLine()) != null)
             {
                 List<String> parts = new List<String>(data.Split('\t'));
-                typos.Add(parts[0], parts[1]);
+                // Ignore malformed data
+                if (parts.Count > 1 && !typos.ContainsKey(parts[0]))
+                {
+                    typos.Add(parts[0], parts[1]);
+                }
             }
         }
 
