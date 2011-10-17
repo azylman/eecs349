@@ -56,7 +56,7 @@ namespace ConsoleApplication1
                 int keyCount = 0;
                 foreach (KeyValuePair<String, String> typo in typos)
                 {
-                    if (keyCount >= foldSize * i && keyCount <= foldSize * (i + 1))
+                    if (keyCount >= foldSize * i && keyCount < foldSize * (i + 1))
                     {
                         trainingSet.Add(typo.Key, typo.Value);
                     }
