@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,11 +20,11 @@ namespace ConsoleApplication1
 
             double[,] d = new double[m + 1, n + 1];
 
-            for (int i = 0; i < m; ++i)
+            for (int i = 0; i < m + 1; ++i)
             {
                 d[i, 0] = i;
             }
-            for (int i = 0; i < n; ++i)
+            for (int i = 0; i < n + 1; ++i)
             {
                 d[0, i] = i;
             }
@@ -49,7 +50,7 @@ namespace ConsoleApplication1
                 }
             }
 
-            return d[m - 1, n - 1];
+            return d[m, n];
         }
 
         private double calculateLevenshteinDistance(String s, String t, bool verbose)
@@ -94,8 +95,8 @@ namespace ConsoleApplication1
             String bestWord = "";
             foreach (String alternateWord in dict)
             {
+                
                 double cost = calculateLevenshteinDistance(word, alternateWord, verbose, costs);
-
                 if (cost < shortestDistance)
                 {
                     bestWord = alternateWord;
@@ -145,23 +146,20 @@ namespace ConsoleApplication1
         {
             resetCosts();
 
-            double delta = .1;
-            // The minimum step size we want to go to.
-            double minDelta = .1;
-
             int maxSteps = 30;
+            double delta = .1;
 
             int steps = 0;
             double error = measureError(typos, useReducedDataSet);
-            while (delta >= minDelta && steps < maxSteps)
+            while (steps < maxSteps)
             {
                 steps++;
+                Console.Write("Step " + steps + " has an error of ");
+                Stopwatch timer = Stopwatch.StartNew();
                 Costs newCost = getNextChild(costs, delta, typos, useReducedDataSet);
-                if (newCost.Equals(costs))
-                {
-                    delta /= 10.0;
-                }
+                long stepTime = timer.ElapsedMilliseconds;
                 costs = newCost;
+                Console.WriteLine("and took " + stepTime + " ms");
             }
         }
 
@@ -177,7 +175,9 @@ namespace ConsoleApplication1
             // Sometimes, use a random child instead of the best child
             if (rnd.NextDouble() > probOfUsingBestChild)
             {
-                return children[rnd.Next(0, children.Count - 1)];
+                Costs child = children[rnd.Next(0, children.Count - 1)];
+                Console.Write(measureError(child, typos, useReducedDataSet, false) + " ");
+                return child;
             }
 
             foreach (Costs child in children)
@@ -190,6 +190,7 @@ namespace ConsoleApplication1
                 }
             }
 
+            Console.Write(lowestError + " ");
             return bestCost;
         }
 

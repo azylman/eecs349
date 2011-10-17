@@ -37,8 +37,6 @@ namespace ConsoleApplication1
             int foldSize = typos.Count / numFolds;
 
             createFolds(numFolds, foldSize);
-
-            writeFoldsToDisk();
         }
 
         public void makeWithSizeN(int foldSize)
@@ -46,8 +44,6 @@ namespace ConsoleApplication1
             int numFolds = typos.Count / foldSize;
 
             createFolds(numFolds, foldSize);
-
-            writeFoldsToDisk();
         }
 
         private void createFolds(int numFolds, int foldSize)
