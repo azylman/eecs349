@@ -36,12 +36,16 @@ namespace ConsoleApplication1
         {
             int foldSize = typos.Count / numFolds;
 
+            folds.Clear();
+
             createFolds(numFolds, foldSize);
         }
 
         public void makeWithSizeN(int foldSize)
         {
             int numFolds = typos.Count / foldSize;
+
+            folds.Clear();
 
             createFolds(numFolds, foldSize);
         }

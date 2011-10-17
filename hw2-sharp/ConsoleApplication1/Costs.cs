@@ -36,6 +36,7 @@ namespace ConsoleApplication1
         public List<Costs> getChildren(double delta)
         {
             List<Costs> children = new List<Costs>();
+
             children.Add(new Costs(deletionCost, insertionCost, substitutionCost - delta));
             children.Add(new Costs(deletionCost, insertionCost - delta, substitutionCost));
             children.Add(new Costs(deletionCost, insertionCost - delta, substitutionCost - delta));
@@ -43,7 +44,25 @@ namespace ConsoleApplication1
             children.Add(new Costs(deletionCost - delta, insertionCost, substitutionCost - delta));
             children.Add(new Costs(deletionCost - delta, insertionCost - delta, substitutionCost));
             children.Add(new Costs(deletionCost - delta, insertionCost - delta, substitutionCost - delta));
-            
+
+            foreach (Costs child in children)
+            {
+                if (child._deletionCost < delta)
+                {
+                    child._deletionCost = delta;
+                }
+
+                if (child._insertionCost < delta)
+                {
+                    child._insertionCost = delta;
+                }
+
+                if (child._substitutionCost < delta)
+                {
+                    child._substitutionCost = delta;
+                }
+            }
+
             return children;
         }
 

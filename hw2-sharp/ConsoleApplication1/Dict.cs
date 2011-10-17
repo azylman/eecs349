@@ -154,11 +154,14 @@ namespace ConsoleApplication1
             while (steps < maxSteps)
             {
                 steps++;
+
                 Console.Write("Step " + steps + " has an error of ");
+
                 Stopwatch timer = Stopwatch.StartNew();
                 Costs newCost = getNextChild(costs, delta, typos, useReducedDataSet);
                 long stepTime = timer.ElapsedMilliseconds;
                 costs = newCost;
+
                 Console.WriteLine("and took " + stepTime + " ms");
             }
         }
@@ -176,6 +179,7 @@ namespace ConsoleApplication1
             if (rnd.NextDouble() > probOfUsingBestChild)
             {
                 Costs child = children[rnd.Next(0, children.Count - 1)];
+
                 Console.Write(measureError(child, typos, useReducedDataSet, false) + " ");
                 return child;
             }
