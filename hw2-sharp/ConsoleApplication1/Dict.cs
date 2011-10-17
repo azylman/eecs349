@@ -76,7 +76,12 @@ namespace ConsoleApplication1
 	        }
         }
 
-        public String findClosestWord(String word, bool useReducedDataSet)
+        public String findClosestWord(String word)
+        {
+            return findClosestWord(word, false);
+        }
+
+        private String findClosestWord(String word, bool useReducedDataSet)
         {
             return findClosestWord(word, costs, useReducedDataSet, false);
         }

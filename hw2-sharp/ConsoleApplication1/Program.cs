@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApplication1
 {
@@ -17,17 +18,62 @@ namespace ConsoleApplication1
             }
 
 	        // Create our file paths
+            String typoPath = args[0];
             String dictPath = args[1];
+            String correctPath = args[2];
 
 	        Dict dict = new Dict(dictPath);
 
+            fix(typoPath, correctPath, dict);
+
             // 5.a
             // -----------------------------------------
-            fiveA(dict);
+            // fiveA(dict);
 
             // 5.b
             // -----------------------------------------
-            fiveB(dict);
+            // fiveB(dict);
+        }
+
+        static void fix(String typoPath, String correctPath, Dict dict)
+        {
+            List<String> lines = new List<String>();
+            using (StreamReader sr = new StreamReader(typoPath))
+            {
+                String item;
+                while ((item = sr.ReadLine()) != null)
+                {
+                    lines.Add(item);
+                }
+            }
+
+            List<List<String>> filteredLines = new List<List<String>>();
+            foreach (String line in lines)
+            {
+                List<String> filteredWords = new List<String>();
+                List<String> words = new List<String>(line.Split());
+                foreach (String word in words)
+                {
+                    String filteredWord = Regex.Replace(word, @"[\W]", "");
+                    if (!String.IsNullOrEmpty(filteredWord))
+                    {
+                        filteredWords.Add(filteredWord);
+                    }
+                }
+                filteredLines.Add(filteredWords);
+            }
+
+            using (StreamWriter sw = new StreamWriter(correctPath))
+            {
+                foreach (List<String> filteredLine in filteredLines)
+                {
+                    foreach (String filteredWord in filteredLine)
+                    {
+                        sw.Write(dict.findClosestWord(filteredWord) + " ");
+                    }
+                    sw.WriteLine();
+                }
+            }
         }
 
         static void fiveA(Dict dict) {
