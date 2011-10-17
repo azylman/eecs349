@@ -51,5 +51,10 @@ namespace ConsoleApplication1
         {
             return deletionCost == other.deletionCost && insertionCost == other.insertionCost && substitutionCost == other.substitutionCost;
         }
+
+        public String ToString()
+        {
+            return "Deletion cost: " + deletionCost + ", insertion cost: " + insertionCost + ", substitution cost: " + substitutionCost;
+        }
     }
 }

@@ -192,5 +192,10 @@ namespace ConsoleApplication1
 
             return bestCost;
         }
+
+        public Costs getCosts()
+        {
+            return costs;
+        }
     }
 }
