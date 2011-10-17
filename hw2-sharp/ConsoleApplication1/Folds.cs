@@ -77,17 +77,21 @@ namespace ConsoleApplication1
             foreach (Fold fold in folds)
             {
                 foldCount++;
-                StreamWriter trainWriter = new StreamWriter(name + foldCount + "train.txt");
-                StreamWriter testWriter = new StreamWriter(name + foldCount + "test.txt");
 
-                foreach (KeyValuePair<String, String> trainingData in fold.trainingSet)
+                using (StreamWriter swTrain = new StreamWriter(name + foldCount + "train.txt"))
                 {
-                    trainWriter.WriteLine(trainingData.Key + "\t" + trainingData.Value);
+                    foreach (KeyValuePair<String, String> trainingData in fold.trainingSet)
+                    {
+                        swTrain.WriteLine(trainingData.Key + "\t" + trainingData.Value);
+                    }
                 }
 
-                foreach (KeyValuePair<String, String> testingData in fold.testingSet)
+                using (StreamWriter swTest = new StreamWriter(name + foldCount + "test.txt"))
                 {
-                    testWriter.WriteLine(testingData.Key + "\t" + testingData.Value);
+                    foreach (KeyValuePair<String, String> testingData in fold.testingSet)
+                    {
+                        swTest.WriteLine(testingData.Key + "\t" + testingData.Value);
+                    }
                 }
             }
         }
