@@ -149,10 +149,14 @@ namespace ConsoleApplication1
             // The minimum step size we want to go to.
             double minDelta = .1;
 
+            int maxSteps = 30;
+
+            int steps = 0;
             double error = measureError(typos, useReducedDataSet);
-            while (delta >= minDelta)
+            while (delta >= minDelta && steps < maxSteps)
             {
-                Costs newCost = getBestChild(costs, delta, typos, useReducedDataSet);
+                steps++;
+                Costs newCost = getNextChild(costs, delta, typos, useReducedDataSet);
                 if (newCost.Equals(costs))
                 {
                     delta /= 10.0;
@@ -161,11 +165,22 @@ namespace ConsoleApplication1
             }
         }
 
-        private Costs getBestChild(Costs parent, double delta, IDictionary<String, String> typos, bool useReducedDataSet)
+        private Costs getNextChild(Costs parent, double delta, IDictionary<String, String> typos, bool useReducedDataSet)
         {
             double lowestError = measureError(typos, useReducedDataSet, false);
             Costs bestCost = parent;
-            foreach (Costs child in parent.getChildren(delta))
+            List<Costs> children = parent.getChildren(delta);
+
+            Random rnd = new Random();
+
+            double probOfUsingBestChild = .75;
+            // Sometimes, use a random child instead of the best child
+            if (rnd.NextDouble() > probOfUsingBestChild)
+            {
+                return children[rnd.Next(0, children.Count - 1)];
+            }
+
+            foreach (Costs child in children)
             {
                 double newError = measureError(child, typos, useReducedDataSet, false);
                 if (newError < lowestError)
